@@ -28,104 +28,114 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(image: AssetImage("images/home/Background.png"), 
-          fit: BoxFit.cover
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(image: AssetImage("images/home/Background.png"), 
+            fit: BoxFit.cover
+            ),
           ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-        
-              //Superdeals
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  //deals
-                  CarouselSlider(
-                    items: HomePageData.imagePathsBanner.map((imgPath) { 
-                      return SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Image.asset(imgPath, fit: BoxFit.fill),
-                      ); }).toList(),
-                      options: CarouselOptions(
-                        height: 290,
-                        viewportFraction: 1,
-                        autoPlay: true,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            currentImg = index;
-                          });
-                        },
-                      )),
-                  
-                  //Indicators
-                  Positioned(
-                    bottom: MediaQuery.of(context).size.height * 0.025,
-                    child: Row(
-                      children: List.generate(HomePageData.imagePathsBanner.length, 
-                      (index) {
-                          bool isSelected = (currentImg == index);
-                          return AnimatedContainer(
-                            width: 12,
-                            height: 12,
-                            margin: EdgeInsets.symmetric(horizontal: isSelected? 6 : 3 ),
-                            decoration: BoxDecoration(
-                              color: isSelected? const Color.fromARGB(141, 202, 202, 243): const Color.fromARGB(153, 0, 0, 0),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            duration: const Duration(milliseconds: 400),
-                          );
-                        }),
-                    ))
-                  
-                ],
-              ),
-              
-              //The page with the recommended products
-               Padding(
-                padding: const EdgeInsets.only(top: 65),
-                child: Column(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+          
+                //Superdeals
+                Stack(
+                  alignment: Alignment.center,
                   children: [
-                    const Text(
-                      "Populair",
-                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                    ),
+                    //deals
+                    CarouselSlider(
+                      items: HomePageData.imagePathsBanner.map((imgPath) { 
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Image.asset(imgPath, fit: BoxFit.fill),
+                        ); }).toList(),
+                        options: CarouselOptions(
+                          height: 290,
+                          viewportFraction: 1,
+                          autoPlay: true,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              currentImg = index;
+                            });
+                          },
+                        )),
                     
-                    const SizedBox(height: 10),
-
-                    Padding(
-                      padding: const EdgeInsets.only(left: 40.0),
-                      child: SizedBox(
-                        height: 170,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) => ProductItem(imagePath: HomePageData.imagePathsPopular[index], 
-                            titel: HomePageData.populairProductName[index]),
-                          itemCount: HomePageData.imagePathsPopular.length,
-                          separatorBuilder: (context, index) => const SizedBox(width: 30),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 35),
-
-                    const Text(
-                      "Aanbevolen",
-                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                    ),
-
-                    const Row(
-                      children: [
-                        
-                      ],
-                    ),
+                    //Indicators
+                    Positioned(
+                      bottom: MediaQuery.of(context).size.height * 0.025,
+                      child: Row(
+                        children: List.generate(HomePageData.imagePathsBanner.length, 
+                        (index) {
+                            bool isSelected = (currentImg == index);
+                            return AnimatedContainer(
+                              width: 12,
+                              height: 12,
+                              margin: EdgeInsets.symmetric(horizontal: isSelected? 6 : 3 ),
+                              decoration: BoxDecoration(
+                                color: isSelected? const Color.fromARGB(141, 202, 202, 243): const Color.fromARGB(153, 0, 0, 0),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              duration: const Duration(milliseconds: 400),
+                            );
+                          }),
+                      ))
+                    
                   ],
                 ),
-              ),
-            ],
+                
+                //The page with the recommended products
+                 Padding(
+                  padding: const EdgeInsets.only(top: 65),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Populair",
+                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
+                      
+                      const SizedBox(height: 10),
+        
+                      Padding(
+                        padding: const EdgeInsets.only(left: 40.0),
+                        child: SizedBox(
+                          height: 170,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) => ProductItem(imagePath: HomePageData.imagePathsPopular[index], 
+                              titel: HomePageData.populairProductName[index]),
+                            itemCount: HomePageData.imagePathsPopular.length,
+                            separatorBuilder: (context, index) => const SizedBox(width: 30),
+                          ),
+                        ),
+                      ),
+        
+                      const SizedBox(height: 35),
+        
+                      const Text(
+                        "Aanbevolen",
+                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
+                
+                      SizedBox(
+                        height: 700,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: GridView.count(
+                            crossAxisCount: 2,
+                            mainAxisSpacing:  25,
+                            crossAxisSpacing: 20,
+                            children: _createRecommendedItems(),
+                          ),
+                        ),
+                      ),
+                      
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -158,6 +168,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+    });
+  }
+  
+  List<Widget> _createRecommendedItems() {
+    return List<Widget>.generate(HomePageData.imagePathsRecommended.length, (index) {
+      return ProductItem(imagePath: HomePageData.imagePathsRecommended[index],
+                  titel: HomePageData.RecommendedProductName[index]);
     });
   }
 }

@@ -28,7 +28,7 @@ class ProductItem extends StatelessWidget{
         children: [
           Column(
             children: [
-              SizedBox(width: width ,height: 100, child: Image.asset(imagePath, fit: BoxFit.fill,)),
+              SizedBox(width: width, height: 100, child: Image.asset(imagePath, fit: BoxFit.fill,)),
 
               const SizedBox(height: 3),
 
