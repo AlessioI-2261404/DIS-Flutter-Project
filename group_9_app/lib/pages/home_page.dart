@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 //deals
                 CarouselSlider(
                   items: HomePageData.imagePathsBanner.map((imgPath) { 
-                    return Container(
+                    return SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Image.asset(imgPath, fit: BoxFit.fill),
                     ); }).toList(),
@@ -78,11 +78,17 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             
             //The page with the recommended products
-            const Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Row(
+            Padding(
+              padding: const EdgeInsets.only(top: 65),
+              child: Column(
                 children: [
-
+                  const Text(
+                    "Populair",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    ),
+                  Row(
+                    
+                  ),
                 ],
               ),
             ),
