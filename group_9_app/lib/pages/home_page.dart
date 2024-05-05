@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 color: isSelected? const Color.fromARGB(141, 202, 202, 243): const Color.fromARGB(153, 0, 0, 0),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              duration: const Duration(milliseconds: 400),
+                              duration: const Duration(milliseconds: 600),
                             );
                           }),
                       ))
@@ -124,13 +124,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           padding: const EdgeInsets.all(20.0),
                           child: GridView.count(
                             crossAxisCount: 2,
-                            mainAxisSpacing:  25,
-                            crossAxisSpacing: 20,
+                            mainAxisSpacing:  30,
+                            crossAxisSpacing: 35,
                             children: _createRecommendedItems(),
                           ),
                         ),
                       ),
-                      
                     ],
                   ),
                 ),
@@ -174,7 +173,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> _createRecommendedItems() {
     return List<Widget>.generate(HomePageData.imagePathsRecommended.length, (index) {
       return ProductItem(imagePath: HomePageData.imagePathsRecommended[index],
-                  titel: HomePageData.RecommendedProductName[index]);
+                  titel: HomePageData.RecommendedProductName[index],
+                  width: 180,);
     });
   }
 }

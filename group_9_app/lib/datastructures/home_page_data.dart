@@ -20,16 +20,16 @@ class HomePageData {
   ];
 
   static final List<String> imagePathsRecommended = [
-    'test',
-    'test',
-    'test',
-    'test',
-    'test',
-    'test',
+    'images/home/YodaFigure.jpg',
+    'images/home/LegoDeathStar.jpg',
+    'images/home/BarbiePulsBeryDollSet.jpg',
+    'images/home/YodaFigure.jpg',
+    'images/home/LegoDeathStar.jpg',
+    'images/home/BarbiePulsBeryDollSet.jpg',
   ];
 
 
-  static final RecommendedProductName = [
+  static final List<String> RecommendedProductName = [
     'test',
     'test',
     'test',

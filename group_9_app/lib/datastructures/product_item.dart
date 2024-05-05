@@ -26,23 +26,26 @@ class ProductItem extends StatelessWidget{
       child: Stack(
         alignment: Alignment.topRight,
         children: [
-          Column(
-            children: [
-              SizedBox(width: width, height: 100, child: Image.asset(imagePath, fit: BoxFit.fill,)),
-
-              const SizedBox(height: 3),
-
-              Row(
-                children: [
-                Text(titel, style: const TextStyle(color: Colors.white, fontSize: 20)),
-              ],),
-              
-              const SizedBox(height: 5),
-
-              Row(
-                children : _createChilderen(),
-              ),
-            ],
+          InkWell(
+            onTap: () => { _goToProductPage() },
+            child: Column(
+              children: [
+                SizedBox(width: width, height: 100, child: Image.asset(imagePath, fit: BoxFit.fill,)),
+            
+                const SizedBox(height: 3),
+            
+                Row(
+                  children: [
+                  Text(titel, style: const TextStyle(color: Colors.white, fontSize: 20)),
+                ],),
+                
+                const SizedBox(height: 5),
+            
+                Row(
+                  children : _createChilderen(),
+                ),
+              ],
+            ),
           ),
           IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
 
@@ -53,6 +56,11 @@ class ProductItem extends StatelessWidget{
 
   List<Widget> _createChilderen() {
     return List<Widget>.generate(rating, (index) => const Icon(Icons.attach_money));
+  }
+
+  void _goToProductPage() {
+    //Go to said product page
+    print("product tapped");
   }
 
 }
