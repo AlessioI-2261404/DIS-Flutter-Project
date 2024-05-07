@@ -1,23 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 63, 148, 223)),
-      ),
-      home: const FavoritePage(),
-    );
-  }
-}
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({Key? key}) : super(key: key);
@@ -27,59 +10,97 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
-  int _selectedIndex = 2; // Index of the favorite page in the bottom navigation bar
+  List<Map<String, dynamic>> _favorites = [];
+  late Map<String, dynamic> _jsonData;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFavorites();
+  }
+
+  Future<void> _loadFavorites() async {
+    final file = File('Account1.json');
+
+    if (await file.exists()) {
+      final content = await file.readAsString();
+      final data = jsonDecode(content) as Map<dynamic, dynamic>;
+
+      // Explicitly cast the data to Map<String, dynamic>
+      _jsonData = Map<String, dynamic>.from(data);
+
+      if (_jsonData.containsKey('favorites')) {
+        setState(() {
+          _favorites = List<Map<String, dynamic>>.from(_jsonData['favorites']);
+        });
+      }
+    }
+  }
+
+  Future<void> _removeFavorite(Map<String, dynamic> item) async {
+    final file = File('Account1.json');
+
+    _favorites.remove(item);
+    _jsonData['favorites'] = _favorites;
+
+    await file.writeAsString(jsonEncode(_jsonData));
+
+    setState(() {});
+  }
+
+  void _confirmRemove(Map<String, dynamic> item) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Remove'),
+          content: const Text('Are you sure you want to remove this item from favorites?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _removeFavorite(item);
+              },
+              child: const Text('Remove'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 69, 159, 237), // Blue color
-        title: const Text('Jouw favorieten'),
-        leading: IconButton(
-          icon: const Icon(Icons.person),
-          onPressed: () {
-            // Handle profile icon tap
-          },
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.share),
-            onPressed: () {
-              // Handle share button tap
-            },
-          ),
-        ],
+        backgroundColor: const Color.fromARGB(255, 69, 159, 237),
+        title: const Text('Your Favorites'),
       ),
-      body: Center(
-        child: Text(
-          'Geen favorieten in je lijst',
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-      ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      body: _favorites.isEmpty
+          ? Center(
+              child: Text(
+                'No favorites in your list',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+            )
+          : ListView.builder(
+              itemCount: _favorites.length,
+              itemBuilder: (context, index) {
+                final item = _favorites[index];
+                return ListTile(
+                  leading: Image.asset(item['imagePath']),
+                  title: Text(item['title']),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => _confirmRemove(item),
+                  ),
+                );
+              },
+            ),
     );
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      backgroundColor: const Color.fromARGB(255, 63, 148, 223),
-      unselectedItemColor: Colors.grey,
-      selectedItemColor: const Color.fromARGB(255, 63, 148, 223),
-      currentIndex: _selectedIndex,
-      onTap: _onItemTapped,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favorites'),
-        BottomNavigationBarItem(icon: Icon(Icons.map), label: 'WinkelGids'),
-        BottomNavigationBarItem(icon: Icon(Icons.qr_code), label: 'Qr Scan'),
-      ],
-    );
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 }

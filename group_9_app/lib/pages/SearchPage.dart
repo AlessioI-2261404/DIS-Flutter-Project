@@ -27,7 +27,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  int _selectedIndex = 1;
   bool _isHelloVisible = false;
   String _searchQuery = '';
 
@@ -43,7 +42,6 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('Search Page')),
       body: _buildBody(),
-      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
@@ -88,37 +86,12 @@ class _SearchPageState extends State<SearchPage> {
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 height: 200,
-                child: Image.asset('assets/images/${_imageNames[index]}', fit: BoxFit.cover),
+                child: Image.asset('images/search/${_imageNames[index]}', fit: BoxFit.cover),
               ),
             ),
           ),
         );
       },
     );
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      backgroundColor: const Color.fromARGB(255, 63, 148, 223),
-      unselectedItemColor: Colors.grey,
-      selectedItemColor: const Color.fromARGB(255, 63, 148, 223),
-      currentIndex: _selectedIndex,
-      onTap: _onItemTapped,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Like List'),
-        BottomNavigationBarItem(icon: Icon(Icons.map), label: 'WinkelGids'),
-        BottomNavigationBarItem(icon: Icon(Icons.qr_code), label: 'Qr Scan'),
-      ],
-    );
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      _isHelloVisible = index == 1 ? false : _isHelloVisible;
-      _searchQuery = index == 1 ? '' : _searchQuery;
-    });
   }
 }

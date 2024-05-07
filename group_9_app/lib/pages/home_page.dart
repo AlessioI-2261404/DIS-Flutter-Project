@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:group_9_app/datastructures/product_item.dart';
-import '../datastructures/home_page_data.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({
+    super.key,
+    required this.title,
+    required this.imagePathsBanner,
+    required this.imagePathsPopular,
+    required this.popularProductNames,
+    required this.imagePathsRecommended,
+    required this.recommendedProductNames,
+  });
+
   final String title;
+  final List<String> imagePathsBanner;
+  final List<String> imagePathsPopular;
+  final List<String> popularProductNames;
+  final List<String> imagePathsRecommended;
+  final List<String> recommendedProductNames;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -13,167 +26,126 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int currentImg = 0;
-  int _selectedIndex = 0;
-
-  void foo() {
-
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(image: AssetImage("images/home/Background.png"), 
-            fit: BoxFit.cover
+      appBar: AppBar(title: Text(widget.title)),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: _buildCarouselSlider(),
+          ),
+          SliverToBoxAdapter(
+            child: _buildSectionTitle("Popular"),
+          ),
+          SliverToBoxAdapter(
+            child: _buildHorizontalList(widget.imagePathsPopular, widget.popularProductNames),
+          ),
+          SliverToBoxAdapter(
+            child: _buildSectionTitle("Recommended"),
+          ),
+          SliverGrid(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final productName = widget.recommendedProductNames[index];
+                return ProductItem(
+                  imagePath: widget.imagePathsRecommended[index],
+                  titel: productName,
+                  width: 180,
+                );
+              },
+              childCount: widget.imagePathsRecommended.length,
+            ),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 30,
+              crossAxisSpacing: 35,
             ),
           ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-          
-                //Superdeals
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    //deals
-                    CarouselSlider(
-                      items: HomePageData.imagePathsBanner.map((imgPath) { 
-                        return SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Image.asset(imgPath, fit: BoxFit.fill),
-                        ); }).toList(),
-                        options: CarouselOptions(
-                          height: 290,
-                          viewportFraction: 1,
-                          autoPlay: true,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              currentImg = index;
-                            });
-                          },
-                        )),
-                    
-                    //Indicators
-                    Positioned(
-                      bottom: MediaQuery.of(context).size.height * 0.025,
-                      child: Row(
-                        children: List.generate(HomePageData.imagePathsBanner.length, 
-                        (index) {
-                            bool isSelected = (currentImg == index);
-                            return AnimatedContainer(
-                              width: 12,
-                              height: 12,
-                              margin: EdgeInsets.symmetric(horizontal: isSelected? 6 : 3 ),
-                              decoration: BoxDecoration(
-                                color: isSelected? const Color.fromARGB(141, 202, 202, 243): const Color.fromARGB(153, 0, 0, 0),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              duration: const Duration(milliseconds: 600),
-                            );
-                          }),
-                      ))
-                    
-                  ],
-                ),
-                
-                //The page with the recommended products
-                 Padding(
-                  padding: const EdgeInsets.only(top: 65),
-                  child: Column(
-                    children: [
-                      const Text(
-                        "Populair",
-                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                      ),
-                      
-                      const SizedBox(height: 10),
-        
-                      Padding(
-                        padding: const EdgeInsets.only(left: 40.0),
-                        child: SizedBox(
-                          height: 170,
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) => ProductItem(imagePath: HomePageData.imagePathsPopular[index], 
-                              titel: HomePageData.populairProductName[index]),
-                            itemCount: HomePageData.imagePathsPopular.length,
-                            separatorBuilder: (context, index) => const SizedBox(width: 30),
-                          ),
-                        ),
-                      ),
-        
-                      const SizedBox(height: 35),
-        
-                      const Text(
-                        "Aanbevolen",
-                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                      ),
-                
-                      SizedBox(
-                        height: 700,
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: GridView.count(
-                            crossAxisCount: 2,
-                            mainAxisSpacing:  30,
-                            crossAxisSpacing: 35,
-                            children: _createRecommendedItems(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          _buildBottomNavigationBar(),
-          ],
+        ],
       ),
     );
   }
 
-  Widget _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      backgroundColor: const Color.fromARGB(255, 63, 148, 223),
-      unselectedItemColor: Colors.grey,
-      selectedItemColor: const Color.fromARGB(255, 63, 148, 223),
-      currentIndex: _selectedIndex,
-      onTap: _onItemTapped,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Like List'),
-        BottomNavigationBarItem(icon: Icon(Icons.map), label: 'WinkelGids'),
-        BottomNavigationBarItem(icon: Icon(Icons.qr_code), label: 'Qr Scan'),
+  Widget _buildCarouselSlider() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        CarouselSlider(
+          items: widget.imagePathsBanner.map((imgPath) {
+            return SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Image.asset(imgPath, fit: BoxFit.fill),
+            );
+          }).toList(),
+          options: CarouselOptions(
+            height: 290,
+            viewportFraction: 1,
+            autoPlay: true,
+            onPageChanged: (index, reason) {
+              setState(() {
+                currentImg = index;
+              });
+            },
+          ),
+        ),
+        if (widget.imagePathsBanner.isNotEmpty)
+          Positioned(
+            bottom: 10,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(widget.imagePathsBanner.length, (index) {
+                return AnimatedContainer(
+                  width: 12,
+                  height: 12,
+                  margin: const EdgeInsets.symmetric(horizontal: 6),
+                  decoration: BoxDecoration(
+                    color: currentImg == index
+                        ? const Color.fromARGB(141, 202, 202, 243)
+                        : const Color.fromARGB(153, 0, 0, 0),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  duration: const Duration(milliseconds: 600),
+                );
+              }),
+            ),
+          ),
       ],
     );
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      child: Text(
+        title,
+        style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+    );
   }
-  
-  List<Widget> _createRecommendedItems() {
-    return List<Widget>.generate(HomePageData.imagePathsRecommended.length, (index) {
-      return ProductItem(imagePath: HomePageData.imagePathsRecommended[index],
-                  titel: HomePageData.RecommendedProductName[index],
-                  width: 180,);
-    });
+
+  Widget _buildHorizontalList(List<String> imagePaths, List<String> titles) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: SizedBox(
+        height: 170,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: imagePaths.length,
+          itemBuilder: (context, index) {
+            final productName = titles[index];
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: ProductItem(
+                imagePath: imagePaths[index],
+                titel: productName,
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }
-
-
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
