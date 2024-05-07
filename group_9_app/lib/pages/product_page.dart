@@ -107,7 +107,7 @@ class _ProductPageState extends State<ProductPage> {
                             SizedBox(
                               width: 360,
                               height: 280,
-                              child: Image.asset('images/home/LegoDeathStar.jpg', fit: BoxFit.fill,),  //Change to product image later (dynamically)
+                              child: Image.asset('images/home/Recommended/LegoDeathStar.jpg', fit: BoxFit.fill,),  //Change to product image later (dynamically)
                             ),
                   
                             const Positioned( //const temp
@@ -141,7 +141,7 @@ class _ProductPageState extends State<ProductPage> {
                               return InkWell(
                                 onTap: () => setState(() { selected = index; print("pjjt");}),
                                 child: Opacity(opacity: selected == index ? 1.0 : 0.6,
-                                child:Image.asset('images/home/LegoDeathStar.jpg', fit: BoxFit.fill))
+                                child:Image.asset('images/home/Recommended/LegoDeathStar.jpg', fit: BoxFit.fill))
                                 );
                             }),
                           ),

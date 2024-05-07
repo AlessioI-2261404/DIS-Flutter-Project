@@ -14,7 +14,7 @@ class CompareItem extends StatelessWidget{
       child: SizedBox(
         width: 90,
         height: 150,
-        child: Image.asset('images/home/YodaFigure.jpg', fit: BoxFit.fill,),
+        child: Image.asset('images/home/Popular/YodaFigure.jpg', fit: BoxFit.fill,),
       ),
     );
   }
