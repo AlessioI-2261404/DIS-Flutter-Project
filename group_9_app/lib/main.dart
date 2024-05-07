@@ -2,11 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'pages/home_page.dart';
+<<<<<<< HEAD
 import 'pages/FavoritesPage.dart';
 import 'pages/SearchPage.dart';
 import 'pages/ProfilePage.dart';
 import 'pages/WinkelGids.dart';
 import 'pages/QRpage.dart';
+=======
+import 'pages/product_page.dart';
+>>>>>>> AO-ProductPage
 
 void main() {
   runApp(const MyApp());
