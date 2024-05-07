@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:group_9_app/callback/on_select_callback.dart';
 import 'package:group_9_app/datastructures/navigation_bar.dart';
+import 'package:group_9_app/datastructures/comparable_item.dart';
+import 'package:group_9_app/datastructures/image_index.dart';
 
 class ProductPage extends StatefulWidget{
   const ProductPage({super.key});
@@ -9,6 +12,8 @@ class ProductPage extends StatefulWidget{
 }
 
 class _ProductPageState extends State<ProductPage> {
+  bool liked = false;
+  int selected = 0;
 
   void _returnBtn() {
     //todo
@@ -23,22 +28,44 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   void _favoritesBtn(){
-    //todo
-  }
+    //Add product to Favorites (or remove from)
 
-  List<Widget> _buildIndexImages() {
+    setState(() {
+      liked = !liked;
+    });
+  }
+  
+  List<Widget> _buildComparableProducts() {
     List<Widget> array = [];
-    for (int i = 0; i < 4; i++){
-      array.add(
-        SizedBox(
-          width: 80,
-          height: 80,
-          child: Image.asset('images/home/LegoDeathStar.jpg', fit: BoxFit.fill, opacity: const AlwaysStoppedAnimation(0.6),),
-        )
-      );
+    for (int i= 0; i < 3; i++ ){
+      array.add(const SizedBox(width: 30,));
+      array.add(const CompareItem());
     }
+
     return array;
   }
+
+  List<Widget> _loadStories() {
+    List<Widget> array = [];
+
+    for (int i = 0; i < 8; i++) {
+      array.add(
+        InkWell(
+          onTap: () => {},  //Show storie
+          child: const CircleAvatar(
+            radius: 25,
+            backgroundColor: Colors.blue,
+            child: Icon(Icons.person_off_outlined, color: Colors.white),
+          ),
+        )
+      );
+
+      array.add(const SizedBox(width: 15,));
+    }
+
+    return array;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -111,11 +138,10 @@ class _ProductPageState extends State<ProductPage> {
                             separatorBuilder: (context, index) => const SizedBox(width: 10),
                             itemCount: 5,
                             itemBuilder: ((context, index) {
-                              return SizedBox(
-                                width: 80,
-                                height: 80,
-                                child: Image.asset('images/home/LegoDeathStar.jpg', fit: BoxFit.fill, opacity: const AlwaysStoppedAnimation(0.6),),
-                              );
+                              return InkWell(
+                                onTap: () => setState(() { selected = index; print("pjjt");}),
+                                child: ImageIndex(path: 'images/home/LegoDeathStar.jpg', opacity: (selected == index)? 1.0 : 0.6)
+                                );
                             }),
                           ),
                         ),
@@ -126,12 +152,12 @@ class _ProductPageState extends State<ProductPage> {
                         Row(
                           children: [
                             const SizedBox(width: 40),
-                            const Icon(Icons.attach_money, size: 23),
+                            const Icon(Icons.attach_money, size: 23,),
                             const Text("5.99", style: TextStyle(fontSize: 20),),
                             const SizedBox(width: 105),
                             IconButton(onPressed: _ARbtn, icon: const Icon(Icons.view_in_ar, size: 45)),
                             IconButton(onPressed: _compareBtn, icon: const Icon(Icons.balance, size: 45)),
-                            IconButton(onPressed: _favoritesBtn, icon: const Icon(Icons.favorite_border, size: 45)),
+                            IconButton(onPressed: _favoritesBtn, icon: liked? const Icon(Icons.favorite, size: 45, color: Colors.red,) : const Icon(Icons.favorite_border, size: 45)),
                           ],
                         ),
                   
@@ -148,24 +174,41 @@ class _ProductPageState extends State<ProductPage> {
                           ),
                   
                         const SizedBox(height: 15),
-                  
                         const Text("Vergelijkbare Producten", style: TextStyle(fontSize: 20),),
-                        const Row(
-                          children: [
+                        const SizedBox(height: 10),
 
+                        Row(
+                          children: [
+                            const SizedBox(width: 15,),
+                            Row(
+                              children: _buildComparableProducts(),
+                            ),
                           ],
                         ),
 
-                        const SizedBox(height: 30),
-
-                        const 
                         //view user stories
+                        const SizedBox(height: 40),
+                        const Text("Verhalen", style: TextStyle(fontSize: 20),),
+                        const SizedBox(height: 10),
+
+                        Padding(
+                          padding: const EdgeInsets.only(left: 30.0),
+                          child: SizedBox(
+                            height: 60,
+                            width: 350,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: _loadStories(),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 25),
                       ],
                     ),
                   ),
                 ),
               ),
-        
             ],
           ),
         ),
