@@ -140,7 +140,8 @@ class _ProductPageState extends State<ProductPage> {
                             itemBuilder: ((context, index) {
                               return InkWell(
                                 onTap: () => setState(() { selected = index; print("pjjt");}),
-                                child: ImageIndex(path: 'images/home/LegoDeathStar.jpg', opacity: (selected == index)? 1.0 : 0.6)
+                                child: Opacity(opacity: selected == index ? 1.0 : 0.6,
+                                child:Image.asset('images/home/LegoDeathStar.jpg', fit: BoxFit.fill))
                                 );
                             }),
                           ),
