@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:group_9_app/callback/on_select_callback.dart';
-import 'package:group_9_app/datastructures/navigation_bar.dart';
 import 'package:group_9_app/datastructures/comparable_item.dart';
 import 'package:group_9_app/datastructures/image_index.dart';
 
@@ -14,9 +12,10 @@ class ProductPage extends StatefulWidget{
 class _ProductPageState extends State<ProductPage> {
   bool liked = false;
   int selected = 0;
+  String imgHead = 'images/home/Recommended/LegoDeathStar.jpg';
 
   void _returnBtn() {
-    //todo
+    if (Navigator.canPop(context)) { Navigator.pop(context); }
   }
 
   void _ARbtn(){
@@ -107,7 +106,7 @@ class _ProductPageState extends State<ProductPage> {
                             SizedBox(
                               width: 360,
                               height: 280,
-                              child: Image.asset('images/home/Recommended/LegoDeathStar.jpg', fit: BoxFit.fill,),  //Change to product image later (dynamically)
+                              child: Image.asset(imgHead, fit: BoxFit.fill,),  //Change to product image later (dynamically)
                             ),
                   
                             const Positioned( //const temp
@@ -139,7 +138,7 @@ class _ProductPageState extends State<ProductPage> {
                             itemCount: 5,
                             itemBuilder: ((context, index) {
                               return InkWell(
-                                onTap: () => setState(() { selected = index; print("pjjt");}),
+                                onTap: () => setState(() { selected = index; imgHead = 'images/home/Popular/YodaFigure.jpg';}), //change to dynamic
                                 child: Opacity(opacity: selected == index ? 1.0 : 0.6,
                                 child:Image.asset('images/home/Recommended/LegoDeathStar.jpg', fit: BoxFit.fill))
                                 );
@@ -213,12 +212,6 @@ class _ProductPageState extends State<ProductPage> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: const Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[ 
-          BottemNavigation(),
-          ],
       ),
     );
   }

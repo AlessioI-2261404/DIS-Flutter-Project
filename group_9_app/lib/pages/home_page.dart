@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:group_9_app/datastructures/product_item.dart';
 
@@ -30,7 +31,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
@@ -52,7 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 return ProductItem(
                   imagePath: widget.imagePathsRecommended[index],
                   titel: productName,
-                  width: 180,
+                  onTap: () { context.push('product');},
+                  width: 160,
                 );
               },
               childCount: widget.imagePathsRecommended.length,
@@ -141,6 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: ProductItem(
                 imagePath: imagePaths[index],
                 titel: productName,
+                onTap: () => GoRouter.of(context).go('/search'),
               ),
             );
           },
