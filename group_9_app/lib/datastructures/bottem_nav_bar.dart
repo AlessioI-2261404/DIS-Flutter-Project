@@ -35,8 +35,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
     setState(() {
       _selectedIndex = index;
     });
-
-    
   }
 
   @override
@@ -64,3 +62,4 @@ class _BottomNavBarState extends State<BottomNavBar> {
     );
   }
 }
+
