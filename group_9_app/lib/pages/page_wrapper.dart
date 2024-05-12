@@ -34,7 +34,7 @@ class _PageWrapperState extends State<PageWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body : SizedBox (
+      body : SizedBox (   //We tell the page to take as much space as possible
         width: double.infinity,
         height: double.infinity,
         child: widget.navShell,
