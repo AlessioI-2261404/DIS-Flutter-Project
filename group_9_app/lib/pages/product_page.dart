@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:group_9_app/datastructures/comparable_item.dart';
-import 'package:group_9_app/datastructures/image_index.dart';
 
 class ProductPage extends StatefulWidget{
   const ProductPage({super.key});
