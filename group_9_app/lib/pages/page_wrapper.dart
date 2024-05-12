@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:group_9_app/datastructures/bottem_nav_bar.dart';
 
 class PageWrapper extends StatefulWidget {
   const PageWrapper({
@@ -17,9 +16,10 @@ class PageWrapper extends StatefulWidget {
 class _PageWrapperState extends State<PageWrapper> {
   int pageIndex = 0;
 
-  void _goToBranch(int pageIndex) {
-    widget.navShell.goBranch(pageIndex,
-    initialLocation: pageIndex == widget.navShell.currentIndex
+  void _goToBranch(int i) {
+    widget.navShell.goBranch(
+      i,
+      initialLocation: i == widget.navShell.currentIndex
     );
   }
 

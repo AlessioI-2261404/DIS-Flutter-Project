@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:group_9_app/Router/router.dart';
-// import 'package:group_9_app/pages/product_page.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -38,7 +37,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 38, 255)),
         useMaterial3: true,
       ),
-      routerConfig: router,
+      routerConfig: AppRouter.router,
     );
   }
 }

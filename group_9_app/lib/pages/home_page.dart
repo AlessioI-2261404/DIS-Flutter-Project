@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 return ProductItem(
                   imagePath: widget.imagePathsRecommended[index],
                   titel: productName,
-                  onTap: () { context.push('product');},
+                  onTap: () { context.goNamed("product"); },
                   width: 160,
                 );
               },
@@ -142,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: ProductItem(
                 imagePath: imagePaths[index],
                 titel: productName,
-                onTap: () => GoRouter.of(context).go('/search'),
+                onTap: () => context.goNamed("product"),
               ),
             );
           },
