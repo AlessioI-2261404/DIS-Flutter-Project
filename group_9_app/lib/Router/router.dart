@@ -17,12 +17,13 @@ class AppRouter {
 
   static String initR = '/home';
 
-  // keys
+  //keys
   static final _rootKey = GlobalKey<NavigatorState>();
   static final _rootHomeKey = GlobalKey<NavigatorState>(debugLabel: 'debug label router');
   static final _rootSearchKey = GlobalKey<NavigatorState>(debugLabel: 'Search key debug');
   static final _rootFavoritesKey = GlobalKey<NavigatorState>(debugLabel: 'root favorites debug');
-
+  static final _rootGuideKey = GlobalKey<NavigatorState>(debugLabel: 'root favorites debug');
+  static final _rootQRKey = GlobalKey<NavigatorState>(debugLabel: 'root favorites debug');
 
   // Go router config
   static final GoRouter router = GoRouter(
@@ -58,10 +59,10 @@ class AppRouter {
 
                 routes: [
                   GoRoute(
-                    path: 'product',
+                    path: 'product/:name',
                     name: 'product',
                     builder: (context, state) {
-                      return ProductPage(key: state.pageKey);
+                      return ProductPage(key: state.pageKey, name:state.pathParameters["name"]!);
                     },
                     ),
                 ],
@@ -94,6 +95,31 @@ class AppRouter {
               ),
             ]),
 
+          //Branch Guide
+          StatefulShellBranch(
+            navigatorKey: _rootGuideKey,
+            routes: [
+              GoRoute(
+                path: '/guide',
+                name: 'guide',
+                builder: (context, state) {
+                  return WinkelGids(key: state.pageKey);
+                },
+              ),
+            ]),
+
+          //Branch QR
+          StatefulShellBranch(
+            navigatorKey: _rootQRKey,
+            routes: [
+              GoRoute(
+                path: '/QR',
+                name: 'QR',
+                builder: (context, state) {
+                  return QRPage(key: state.pageKey);
+                },
+              ),
+            ]),
           ], 
         ),
 

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'dart:io';
 import 'package:group_9_app/datastructures/comparable_item.dart';
 
 class ProductPage extends StatefulWidget{
-  const ProductPage({super.key});
+  const ProductPage({super.key, required this.name});
+
+  final String name;
 
   @override
   State<ProductPage> createState() => _ProductPageState();
@@ -12,6 +16,64 @@ class _ProductPageState extends State<ProductPage> {
   bool liked = false;
   int selected = 0;
   String imgHead = 'images/home/Recommended/LegoDeathStar.jpg';
+
+  @override
+  void initState() {
+    super.initState();
+    liked = _isFavoriteFromJson(widget.name);
+  }
+
+  bool _isFavoriteFromJson(String title) {
+    final file = File('Account1.json');
+    if (!file.existsSync()) {
+      return false;
+    }
+
+    final content = file.readAsStringSync();
+    if (content.isEmpty) {
+      return false;
+    }
+
+    Map<String, dynamic> data;
+    try {
+      data = jsonDecode(content) as Map<String, dynamic>;
+    } catch (e) {
+      // Handle JSON parsing errors
+      return false;
+    }
+
+    final favorites = List<Map<String, dynamic>>.from(data['favorites'] ?? []);
+    return favorites.any((item) => item['title'] == title);
+  }
+
+
+Future<void> _updateFavoritesInJson() async {
+    final file = File('Account1.json');
+    Map<String, dynamic> data = {};
+
+    if (await file.exists()) {
+      final content = await file.readAsString();
+      try {
+        data = jsonDecode(content) as Map<String, dynamic>;
+      } catch (e) {
+        data = {};
+      }
+    }
+
+    final favorites = List<Map<String, dynamic>>.from(data['favorites'] ?? []);
+
+    if (liked) {
+      if (!favorites.any((item) => item['title'] == widget.name)) {
+        favorites.add({'title': widget.name, 'imagePath': 'images/home/Popular/YodaFigure.jpg'});
+      }
+    } else {
+      favorites.removeWhere((item) => item['title'] == widget.name);
+    }
+
+    data['favorites'] = favorites;
+
+    await file.writeAsString(jsonEncode(data));
+  }
 
   void _returnBtn() {
     if (Navigator.canPop(context)) { Navigator.pop(context); }
@@ -25,12 +87,20 @@ class _ProductPageState extends State<ProductPage> {
     //todo
   }
 
-  void _favoritesBtn(){
-    //Add product to Favorites (or remove from)
-
+  void _favoritesBtn() async {
     setState(() {
       liked = !liked;
     });
+
+    await _updateFavoritesInJson();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          liked ? 'Added to favorites' : 'Removed from favorites',
+        ),
+      ),
+    );
   }
   
   List<Widget> _buildComparableProducts() {
@@ -83,7 +153,7 @@ class _ProductPageState extends State<ProductPage> {
                 children: [
                   IconButton(onPressed: _returnBtn, icon: const Icon(Icons.keyboard_return), iconSize: 40),
                   const SizedBox(width: 45),
-                  const Text("<Product name>", textAlign: TextAlign.center, style: TextStyle(fontSize: 25)),
+                  Text(widget.name, textAlign: TextAlign.center, style: const TextStyle(fontSize: 25)),
                   const SizedBox(width: 45),
                   IconButton(onPressed: _returnBtn, icon: const Icon(Icons.share), iconSize: 40),
                 ],
