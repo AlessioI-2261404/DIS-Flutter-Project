@@ -1,18 +1,20 @@
+import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
 
 class ProductItem extends StatefulWidget {
   const ProductItem({
     Key? key,
     required this.imagePath,
     required this.titel,
+    required this.onTap,
     this.rating = 1,
     this.width = 150,
   }) : super(key: key);
 
   final String titel;
   final String imagePath;
+  final VoidCallback onTap;
   final int rating;
   final double? width;
 
@@ -105,9 +107,7 @@ class _ProductItemState extends State<ProductItem> {
         alignment: Alignment.topRight,
         children: [
           InkWell(
-            onTap: () {
-              print("Product tapped");
-            },
+            onTap: widget.onTap,
             child: Column(
               children: [
                 SizedBox(

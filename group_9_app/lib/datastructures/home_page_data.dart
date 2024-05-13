@@ -28,7 +28,6 @@ class HomePageData {
     'images/home/BarbiePulsBeryDollSet.jpg',
   ];
 
-
   static final List<String> RecommendedProductName = [
     'test',
     'test',
