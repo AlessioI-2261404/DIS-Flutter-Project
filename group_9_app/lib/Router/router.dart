@@ -57,6 +57,7 @@ class AppRouter {
                     );
                 },
 
+                //sub branch
                 routes: [
                   GoRoute(
                     path: 'product/:name',
