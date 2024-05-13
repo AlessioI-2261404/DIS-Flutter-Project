@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:group_9_app/datastructures/product_item.dart';
+import 'package:group_9_app/pages/product_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -52,7 +52,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 return ProductItem(
                   imagePath: widget.imagePathsRecommended[index],
                   titel: productName,
-                  onTap: () => context.goNamed("product", pathParameters: { 'name' : productName }),
+                  onTap: () 
+                  {
+                    print(productName); 
+                  },
                   width: 160,
                 );
               },
@@ -142,7 +145,10 @@ class _MyHomePageState extends State<MyHomePage> {
               child: ProductItem(
                 imagePath: imagePaths[index],
                 titel: productName,
-                onTap: () => context.goNamed("product", pathParameters: { 'name' : productName }),
+                onTap: ()
+                {
+                   print(productName); 
+                },
               ),
             );
           },
