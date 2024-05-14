@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
         profilePicPath = jsonData['pfppicpath'] ?? 'images/Default_pfp.png';
       });
     } else {
-      print('Account preferences file does not exist');
+      print('Het accountvoorkeurenbestand bestaat niet');
     }
   }
 
@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
         });
       }
     } else {
-      print('Product file does not exist');
+      print('Productbestand bestaat niet');
     }
     loadPreferences();
   }
@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ).toList();
       });
     } else {
-      print('Account preferences file does not exist');
+      print('Het accountvoorkeurenbestand bestaat niet');
     }
   }
 

@@ -8,7 +8,7 @@ class ProductItem extends StatefulWidget {
     required this.imagePath,
     required this.titel,
     required this.onTap,
-    this.rating = "No rating",
+    this.rating = "Geen beoordeling",
     this.width = 150,
   }) : super(key: key);
 
@@ -41,7 +41,7 @@ class _ProductItemState extends State<ProductItem> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          isFavorite ? 'Added to favorites' : 'Removed from favorites',
+          isFavorite ? 'Toegevoegd aan favorieten' : 'Verwijderd uit favorieten',
         ),
       ),
     );

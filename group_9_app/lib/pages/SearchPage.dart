@@ -150,7 +150,7 @@ class _SearchPageState extends State<SearchPage> {
             },
             onSubmitted: (value) => setState(() => _isHelloVisible = true),
             decoration: const InputDecoration(
-              hintText: 'Search...',
+              hintText: 'Zoeken...',
               border: OutlineInputBorder(),
               contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
               prefixIcon: Icon(Icons.search, color: Color.fromARGB(255, 63, 148, 223)),
@@ -181,7 +181,7 @@ class _SearchPageState extends State<SearchPage> {
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: Wrap(
           children: [
-            Text('Do you mean: ', style: TextStyle(color: Colors.grey)),
+            Text('Bedoel je:', style: TextStyle(color: Colors.grey)),
             Text(
               _suggestedQuery!,
               style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),

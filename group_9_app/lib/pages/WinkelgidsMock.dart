@@ -56,7 +56,7 @@ class _WinkelgidsMockState extends State<WinkelgidsMock> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Mocked AR functionality',
+                      'Mocked AR functionaliteit',
                       style: TextStyle(fontSize: 20),
                     ),
                     SizedBox(width: 10),

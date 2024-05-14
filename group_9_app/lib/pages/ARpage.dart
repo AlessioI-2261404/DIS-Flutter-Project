@@ -10,7 +10,7 @@ class ARPage extends StatelessWidget {
         children: <Widget>[
           Center(
             child: Text(
-              "AR Content Here", // Placeholder for your AR content
+              "AR-inhoud hier", // Placeholder for your AR content
               style: TextStyle(fontSize: 24, color: Colors.grey),
             ),
           ),

@@ -53,19 +53,19 @@ class _FavoritePageState extends State<FavoritePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirm Remove'),
-          content: const Text('Are you sure you want to remove this item from favorites?'),
+          title: const Text('Bevestig Verwijderen'),
+          content: const Text('Weet u zeker dat u dit item uit uw favorieten wilt verwijderen?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: const Text('Annuleren'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 _removeFavorite(item);
               },
-              child: const Text('Remove'),
+              child: const Text('Verwijderen'),
             ),
           ],
         );
@@ -78,12 +78,12 @@ class _FavoritePageState extends State<FavoritePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 69, 159, 237),
-        title: const Text('Your Favorites'),
+        title: const Text('Je favorieten'),
       ),
       body: _favorites.isEmpty
           ? Center(
               child: Text(
-                'No favorites in your list',
+                'Geen favorieten in je lijst',
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             )

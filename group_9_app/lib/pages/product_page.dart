@@ -104,7 +104,7 @@ class _ProductPageState extends State<ProductPage> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(liked ? 'Added to favorites' : 'Removed from favorites'),
+        content: Text(liked ? 'Toegevoegd aan favorieten' : 'Verwijderd uit favorieten'),
       ),
     );
   }
@@ -172,7 +172,7 @@ class _ProductPageState extends State<ProductPage> {
   List<Widget> _buildStories() {
     if (widget.theItem.stories.isEmpty) {
       // If there are no stories, return a single widget with a message
-      return [const Text("No stories yet.", style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic))];
+      return [const Text("Nog geen verhalen.", style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic))];
     } else {
       // Otherwise, generate widgets based on the stories
       return List<Widget>.generate(widget.theItem.stories.length, (index) {
@@ -388,7 +388,7 @@ class _ProductPageState extends State<ProductPage> {
     return Padding(
       padding: const EdgeInsets.all(15),
       child: ExpansionTile(
-        title: const Text("Description"),
+        title: const Text("Beschrijving"),
         subtitle: const Text("klik hier om meer te zien over het product."),
         children: [
           widget.theItem.description.isNotEmpty 
@@ -403,7 +403,7 @@ class _ProductPageState extends State<ProductPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Stories", style: TextStyle(fontSize: 20)),
+        const Text("Verhalen", style: TextStyle(fontSize: 20)),
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.only(left: 7.0),

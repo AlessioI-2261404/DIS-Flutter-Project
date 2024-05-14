@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:group_9_app/main.dart';
+
 
 class CompletePage extends StatelessWidget {
   const CompletePage({Key? key}) : super(key: key);
@@ -55,7 +57,11 @@ class CompletePage extends StatelessWidget {
                         color: Colors.white,
                       ),
                       onPressed: () {
-                        // Navigate to the next page
+                          Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyApp()), // Replace MainPage with your actual main page widget
+                          (Route<dynamic> route) => false,
+                        );
                       },
                     ),
                   ],

@@ -72,7 +72,7 @@ class BottomNavBarState extends State<BottomNavBar> {
       case 3:
         return const WinkelGids();
       default:
-        return const Center(child: Text("Page not found"));
+        return const Center(child: Text("Pagina niet gevonden"));
     }
   }
 
@@ -103,8 +103,8 @@ class BottomNavBarState extends State<BottomNavBar> {
       showDialog(
         context: localContext,
         builder: (BuildContext dialogContext) => AlertDialog(
-          title: const Text('Location Required'),
-          content: const Text('You can\'t use this function without enabling your location. Do you want to enable it?'),
+          title: const Text('We hebben je locatie nodig'),
+          content: const Text('U kunt deze functie niet gebruiken zonder uw locatie in te schakelen. Wilt u dit inschakelen?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(),
