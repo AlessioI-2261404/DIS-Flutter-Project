@@ -23,7 +23,7 @@ void createEmptyJsonFile() async {
       'cameraAccess': true,
       'locationAccess': false,
     },
-    'pfppicpath': 'picture.jpg',
+    'pfppicpath': 'images/home/Background.png',
   };
 
   final file = File('Account1.json');

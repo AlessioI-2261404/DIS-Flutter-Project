@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:group_9_app/datastructures/product.dart';
 import 'package:group_9_app/datastructures/product_item.dart';
 import 'package:group_9_app/pages/product_page.dart';
+import 'package:group_9_app/pages/profile_choose.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -23,11 +24,26 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Product> products = [];
   List<Product> popularProducts = [];
   List<Product> recommendedProducts = [];
+  String profilePicPath = 'images/Default_pfp.png'; // Default profile picture
 
   @override
   void initState() {
     super.initState();
+    loadProfilePicture();
     loadProducts();
+  }
+
+  Future<void> loadProfilePicture() async {
+    final file = File('Account1.json');
+    if (await file.exists()) {
+      final contents = await file.readAsString();
+      final jsonData = jsonDecode(contents);
+      setState(() {
+        profilePicPath = jsonData['pfppicpath'] ?? 'images/Default_pfp.png';
+      });
+    } else {
+      print('Account preferences file does not exist');
+    }
   }
 
   Future<void> loadProducts() async {
@@ -67,62 +83,84 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(child: _buildCarouselSlider()),
-
-          SliverToBoxAdapter(child: _buildSectionTitle("populaire items")),
-          SliverGrid(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final theItem = popularProducts[index];
-                return ProductItem(
-                  rating: theItem.abstractPrice,
-                  imagePath: theItem.mainImage,
-                  titel: theItem.name,
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ProductPage(name: theItem.name, theItem: theItem)
-                    ));
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(child: _buildCarouselSlider()),
+              SliverToBoxAdapter(child: _buildSectionTitle("populaire items")),
+              SliverGrid(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final theItem = popularProducts[index];
+                    return ProductItem(
+                      rating: theItem.abstractPrice,
+                      imagePath: theItem.mainImage,
+                      titel: theItem.name,
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ProductPage(name: theItem.name, theItem: theItem)
+                        ));
+                      },
+                      width: 160,
+                    );
                   },
-                  width: 160,
-                );
-              },
-              childCount: popularProducts.length,
-            ),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 30,
-              crossAxisSpacing: 35,
-            ),
+                  childCount: popularProducts.length,
+                ),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 30,
+                  crossAxisSpacing: 35,
+                ),
+              ),
+              SliverToBoxAdapter(child: _buildSectionTitle("Aangeraden items")),
+              SliverGrid(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final theItem = recommendedProducts[index];
+                    return ProductItem(
+                      rating: recommendedProducts[index].abstractPrice,
+                      imagePath: recommendedProducts[index].mainImage,
+                      titel: recommendedProducts[index].name,
+                      onTap: () 
+                      {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ProductPage(name: theItem.name, theItem: theItem)
+                        ));
+                      },
+                      width: 160,
+                    );
+                  },
+                  childCount: recommendedProducts.length,
+                ),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 30,
+                  crossAxisSpacing: 35,
+                ),
+              ),
+            ],
           ),
-          SliverToBoxAdapter(child: _buildSectionTitle("Aangeraden items")),
-          SliverGrid(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final theItem = recommendedProducts[index];
-                return ProductItem(
-                  rating: recommendedProducts[index].abstractPrice,
-                  imagePath: recommendedProducts[index].mainImage,
-                  titel: recommendedProducts[index].name,
-                  onTap: () 
-                  {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ProductPage(name: theItem.name, theItem: theItem)
-                    ));
-                  },
-                  width: 160,
-                );
-              },
-              childCount: recommendedProducts.length,
-            ),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 30,
-              crossAxisSpacing: 35,
-            ),
+          Positioned(
+            top: 40,
+            right: 20,
+            child: _buildProfilePicture(),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildProfilePicture() {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ProfileChoose(),
+        ));
+      },
+      child: CircleAvatar(
+        radius: 30,
+        backgroundImage: AssetImage(profilePicPath), 
       ),
     );
   }
@@ -222,5 +260,4 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
       );
   }
-
 }
