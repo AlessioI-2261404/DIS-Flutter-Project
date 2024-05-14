@@ -418,13 +418,15 @@ class _ProductPageState extends State<ProductPage> {
           ),
         ),
 
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const AddStoryPage()
-            ));
-          }, 
-          child: const Text("Voeg verhaal toe")),
+        Center(
+          child: TextButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => AddStoryPage(product: widget.name)
+              ));
+            }, 
+            child: const Text("Voeg verhaal toe")),
+        ),
       ],
     );
   }
