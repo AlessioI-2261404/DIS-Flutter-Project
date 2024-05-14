@@ -7,8 +7,9 @@ import 'dart:io';
 import 'package:group_9_app/datastructures/product.dart';
 
 class RatingBar extends StatefulWidget{
-  const RatingBar({super.key, required this.product});
+  const RatingBar({super.key, required this.product, required this.refresh});
   final String product;
+  final VoidCallback refresh;
 
   @override
   State<StatefulWidget> createState() => _RatingBarState();
@@ -94,6 +95,8 @@ class _RatingBarState extends State<RatingBar> {
           ),
         ),
       );
+
+      widget.refresh();
     }
   }
 

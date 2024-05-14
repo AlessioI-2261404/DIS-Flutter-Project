@@ -8,14 +8,14 @@ class ProductItem extends StatefulWidget {
     required this.imagePath,
     required this.titel,
     required this.onTap,
-    this.rating = "No rating",  
+    this.rating = "No rating",
     this.width = 150,
   }) : super(key: key);
 
   final String titel;
   final String imagePath;
   final VoidCallback onTap;
-  final String rating;  
+  final String rating;
   final double? width;
 
   @override
@@ -102,32 +102,42 @@ class _ProductItemState extends State<ProductItem> {
   Widget build(BuildContext context) {
     return Container(
       width: widget.width,
-      color: const Color.fromARGB(255, 10, 133, 237),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 10, 133, 237),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 4,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
       child: Stack(
         alignment: Alignment.topRight,
         children: [
           InkWell(
             onTap: widget.onTap,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, // Align text to the start
+              crossAxisAlignment: CrossAxisAlignment.start, 
               children: [
                 SizedBox(
                   width: widget.width,
-                  height: 80,
-                  child: Image.asset(widget.imagePath, fit: BoxFit.cover), // Changed fit to cover
+                  height: 70,
+                  child: Image.asset(widget.imagePath, fit: BoxFit.fill), 
                 ),
                 const SizedBox(height: 3),
                 Flexible(
                   child: Text(
                     widget.titel,
-                    style: const TextStyle(color: Colors.white, fontSize: 18),
-                    overflow: TextOverflow.ellipsis, // Added overflow handling
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                    overflow: TextOverflow.ellipsis, 
                   ),
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 3),
                 Text(
-                  widget.rating,  // Display the rating directly as text
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  widget.rating, 
+                  style: TextStyle(color: Colors.white, fontSize: 14),
                 ),
               ],
             ),

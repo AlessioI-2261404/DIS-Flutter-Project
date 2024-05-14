@@ -93,24 +93,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     final theItem = popularProducts[index];
-                    return ProductItem(
-                      rating: theItem.abstractPrice,
-                      imagePath: theItem.mainImage,
-                      titel: theItem.name,
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ProductPage(name: theItem.name, theItem: theItem)
-                        ));
-                      },
-                      width: 160,
+                    return Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: ProductItem(
+                        rating: theItem.abstractPrice,
+                        imagePath: theItem.mainImage,
+                        titel: theItem.name,
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ProductPage(name: theItem.name, theItem: theItem)
+                          ));
+                        },
+                        width: 160,
+                      ),
                     );
                   },
                   childCount: popularProducts.length,
                 ),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 30,
-                  crossAxisSpacing: 35,
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 30,
                 ),
               ),
               SliverToBoxAdapter(child: _buildSectionTitle("Aangeraden items")),
@@ -118,17 +121,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     final theItem = recommendedProducts[index];
-                    return ProductItem(
-                      rating: recommendedProducts[index].abstractPrice,
-                      imagePath: recommendedProducts[index].mainImage,
-                      titel: recommendedProducts[index].name,
-                      onTap: () 
-                      {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ProductPage(name: theItem.name, theItem: theItem)
-                        ));
-                      },
-                      width: 160,
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ProductItem(
+                        rating: recommendedProducts[index].abstractPrice,
+                        imagePath: recommendedProducts[index].mainImage,
+                        titel: recommendedProducts[index].name,
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ProductPage(name: theItem.name, theItem: theItem)
+                          ));
+                        },
+                        width: 160,
+                      ),
                     );
                   },
                   childCount: recommendedProducts.length,
@@ -136,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 30,
-                  crossAxisSpacing: 35,
+                  crossAxisSpacing: 30,
                 ),
               ),
             ],
@@ -158,9 +163,22 @@ class _MyHomePageState extends State<MyHomePage> {
           builder: (context) => ProfileChoose(),
         ));
       },
-      child: CircleAvatar(
-        radius: 30,
-        backgroundImage: AssetImage(profilePicPath), 
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              spreadRadius: 4,
+              blurRadius: 5,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ],
+        ),
+        child: CircleAvatar(
+          radius: 30,
+          backgroundImage: AssetImage(profilePicPath),
+        ),
       ),
     );
   }
@@ -235,29 +253,29 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildHorizontalList() {
-      return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: SizedBox(
-              height: 170,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: popularProducts.length,
-                  itemBuilder: (context, index) {
-                      final theProduct = popularProducts[index];
-                      return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: ProductItem(
-                              rating: theProduct.abstractPrice,
-                              imagePath: theProduct.mainImage,
-                              titel: theProduct.name,
-                              onTap: () {
-                                  print(theProduct.name); 
-                              },
-                          ),
-                      );
-                  },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: SizedBox(
+        height: 170,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: popularProducts.length,
+          itemBuilder: (context, index) {
+            final theProduct = popularProducts[index];
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: ProductItem(
+                rating: theProduct.abstractPrice,
+                imagePath: theProduct.mainImage,
+                titel: theProduct.name,
+                onTap: () {
+                  print(theProduct.name);
+                },
               ),
-          ),
-      );
+            );
+          },
+        ),
+      ),
+    );
   }
 }
