@@ -36,6 +36,10 @@ class _ProductPageState extends State<ProductPage> {
     setState(() {});
   }
 
+  void refreshStories() {
+    setState(() {});
+  }
+
   bool _isFavoriteFromJson(String title) {
     final file = File('Account1.json');
     if (!file.existsSync()) {
@@ -422,7 +426,7 @@ class _ProductPageState extends State<ProductPage> {
           child: TextButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => AddStoryPage(product: widget.name)
+                builder: (context) => AddStoryPage(product: widget.name, refresh: refreshStories,)
               ));
             }, 
             child: const Text("Voeg verhaal toe")),

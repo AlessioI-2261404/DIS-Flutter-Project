@@ -1,13 +1,16 @@
-import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
+import 'package:path/path.dart';
+import 'dart:convert';
 import 'dart:io';
 
 class AddStoryPage extends StatefulWidget {
-  const AddStoryPage({super.key, required this.product});
+  const AddStoryPage({super.key, required this.product, required this.refresh});
   final String product;
-
+  final VoidCallback refresh;
+  
   @override
   State<AddStoryPage> createState() => _AddStoryPageState();
 }
@@ -15,12 +18,7 @@ class AddStoryPage extends StatefulWidget {
 class _AddStoryPageState extends State<AddStoryPage> {
   File ? _selected;
   bool choosen = false;
-
-  void _navigateBack() {
-    if (Navigator.canPop(context)) {
-      Navigator.pop(context);
-    }
-  }
+  var uuid = const Uuid();
 
   Future _pickFileFormGallary() async {
     final returnFile = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -32,9 +30,14 @@ class _AddStoryPageState extends State<AddStoryPage> {
     });
   }
 
-  // String getFileName(String path){
-  //   path.
+  // String getFileExtension(String file){
+  //   List<String> exts = file.split('.');
+  //   return exts.last;
   // }
+
+  void _return() {
+    Navigator.pop(context as BuildContext);
+  }
 
   void _uploadStory() async {
     if (_selected == null) { return; }
@@ -52,13 +55,42 @@ class _AddStoryPageState extends State<AddStoryPage> {
       }
     }
 
-    Map<String, dynamic> productData = {};
-    //search for product
-    data.forEach((key, value) { if (key == widget.product) {
-      productData[key] = value;
-    }});
+    print(file.path);
 
-    dynamic test = productData[widget.product];
+    final String fileName = uuid.v1() + '.png';  //generate name based on time
+    final String savedPath = join("images/stories/", fileName);
+
+    //copy the selected image to the specified path
+    await File(_selected!.path).copy(savedPath);
+    _modifyJsonFile(savedPath);
+    widget.refresh(); //Call refresh
+    _return();
+  }
+
+  Future<void> _modifyJsonFile(String path) async {
+    // Read the JSON file
+    final File file = File('Product.json');
+    if (!file.existsSync()) {
+      if (kDebugMode) { print("File not found"); }
+      return;
+    }
+    final String contents = await file.readAsString();
+    final List<dynamic> jsonData = jsonDecode(contents);
+
+    // Find the product and update its stories
+    for (var product in jsonData) {
+      if (product['name'] == widget.product) {
+        product['stories'].add({
+          'type': 'IMG',
+          'header': path,
+          'file': path,
+        });
+        break;
+      }
+    }
+
+    // Write the updated JSON back to the file
+    await file.writeAsString(jsonEncode(jsonData));
   }
 
   @override

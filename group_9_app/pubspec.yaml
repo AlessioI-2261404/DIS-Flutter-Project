@@ -38,6 +38,8 @@ dependencies:
   go_router: ^14.0.2
   video_player: ^2.8.6
   image_picker: ^0.8.6+1
+  path: ^1.8.3
+  uuid: ^4.4.0
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +72,7 @@ flutter:
     - images/home/Popular/
     - images/home/Recommended/
     - images/search/
+    - images/stories/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
