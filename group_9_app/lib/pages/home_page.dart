@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:group_9_app/datastructures/product.dart';
 import 'package:group_9_app/datastructures/product_item.dart';
+import 'package:group_9_app/pages/ProfilePage.dart';
 import 'package:group_9_app/pages/product_page.dart';
 import 'package:group_9_app/pages/profile_choose.dart';
 
@@ -25,6 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Product> popularProducts = [];
   List<Product> recommendedProducts = [];
   String profilePicPath = 'images/Default_pfp.png'; // Default profile picture
+  bool loggedIn = true;
 
   @override
   void initState() {
@@ -40,9 +43,14 @@ class _MyHomePageState extends State<MyHomePage> {
       final jsonData = jsonDecode(contents);
       setState(() {
         profilePicPath = jsonData['pfppicpath'] ?? 'images/Default_pfp.png';
+        if (profilePicPath == 'images/Default_pfp.png') { 
+          loggedIn = false; 
+        } else { loggedIn = true; }
       });
     } else {
-      print('Het accountvoorkeurenbestand bestaat niet');
+      if (kDebugMode) {
+        print('Het accountvoorkeurenbestand bestaat niet');
+      }
     }
   }
 
@@ -59,7 +67,9 @@ class _MyHomePageState extends State<MyHomePage> {
         });
       }
     } else {
-      print('Productbestand bestaat niet');
+      if (kDebugMode) {
+        print('Productbestand bestaat niet');
+      }
     }
     loadPreferences();
   }
@@ -76,7 +86,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ).toList();
       });
     } else {
-      print('Het accountvoorkeurenbestand bestaat niet');
+      if (kDebugMode) {
+        print('Het accountvoorkeurenbestand bestaat niet');
+      }
     }
   }
 
@@ -160,7 +172,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ChooseProfile(),
+          builder: (context) { 
+            if (loggedIn) { print('profile page logged in : $loggedIn'); return const ProfilePage(); } 
+            else { print('choose profile logged in : $loggedIn'); return const ChooseProfile();} },
         ));
       },
       child: Container(
@@ -171,7 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.black.withOpacity(0.5),
               spreadRadius: 4,
               blurRadius: 5,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3), // changes position of shadow
             ),
           ],
         ),
