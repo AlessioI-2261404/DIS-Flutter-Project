@@ -1,9 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:group_9_app/datastructures/video_player_widget.dart';
 
 class StoryPage extends StatefulWidget{
-  const StoryPage({super.key, required this.file, required this.type});
+  const StoryPage({Key? key, required this.file, required this.type}) : super(key : key);
   final String file;
   final String type;
 
@@ -19,16 +20,24 @@ class _StoryPageState extends State<StoryPage>{
   void initState() {
     super.initState();
     if (widget.type != 'IMG') { 
-      _controller = VideoPlayerController.asset(widget.file)
-    ..addListener(() => setState(() {}))
-    ..initialize()
-    .then((value) => _controller!.play()); 
+      _initVideo();
     }
+  }
+
+  void _initVideo() async {
+    try {
+      _controller = VideoPlayerController.asset(widget.file)
+      ..addListener(() => setState(() {}))
+      ..initialize()
+      .then((value) => _controller?.play()); 
+    } catch (e) { if (kDebugMode) {
+      print("Error: $e");
+    } }
   }
 
   @override
   void dispose(){
-    if (_controller != null) { _controller!.dispose(); }
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -50,12 +59,10 @@ class _StoryPageState extends State<StoryPage>{
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: AlignmentDirectional.topStart,
+      alignment: AlignmentDirectional.center,
       children: [
         Positioned(
           child: SizedBox(
-            width: double.infinity,
-            height: 500,
             child: _loadCorrectFileType(),
           ),
         ),
