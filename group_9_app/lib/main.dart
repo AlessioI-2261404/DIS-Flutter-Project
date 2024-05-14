@@ -24,6 +24,7 @@ void createEmptyJsonFile() async {
       'locationAccess': false,
     },
     'pfppicpath': 'images/home/Background.png',
+    'ratings': [],
   };
 
   final file = File('Account1.json');

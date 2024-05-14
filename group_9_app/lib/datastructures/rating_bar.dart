@@ -1,8 +1,14 @@
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:group_9_app/datastructures/product.dart';
 
 class RatingBar extends StatefulWidget{
-  const RatingBar({super.key});
+  const RatingBar({super.key, required this.product});
+  final String product;
 
   @override
   State<StatefulWidget> createState() => _RatingBarState();
@@ -43,8 +49,52 @@ class _RatingBarState extends State<RatingBar> {
     return rate;
   }
 
-  void _addRating() {
-    //add rating to database
+  Future<void> _write_rating() async {
+    final file = File('Account1.json');
+    Map<String, dynamic> data = {};
+
+    //Check if file exists
+    if (await file.exists()) {
+      final content = await file.readAsString();
+      try {
+        data = jsonDecode(content) as Map<String, dynamic>;
+      } catch (e) {
+        data = {};
+      }
+    }
+
+    //Get current file data
+    final String name = widget.product;
+    final ratings = List<Map<String, dynamic>>.from(data['ratings'] ?? []);
+
+    bool found = false;
+    if (ratings.isNotEmpty){
+      found = ratings.any((element) => (element['name'] == widget.product));
+    }
+
+    //We remove previous rating
+    if (found) {
+      ratings.removeWhere((item) => item['name'] == widget.product);
+    }
+
+    //write new rating to json
+    ratings.add({"name":name, "rating":rating});
+    data['ratings'] = ratings;
+    await file.writeAsString(jsonEncode(data));
+  }
+
+  void _addRating() async{
+    if (rating > 0) { 
+      await _write_rating(); 
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Review is toegevoegd',
+          ),
+        ),
+      );
+    }
   }
 
   @override

@@ -202,7 +202,7 @@ class _ProductPageState extends State<ProductPage> {
             const SizedBox(height: 45),
             _buildComparableProductsSection(),
             const SizedBox(height: 45),
-            const RatingBar(),
+            RatingBar(product: widget.theItem.name),
           ],
         ),
       ),
@@ -366,6 +366,12 @@ class _ProductPageState extends State<ProductPage> {
             ),
           ),
         ),
+
+        TextButton(
+          onPressed: () {
+            //TODO
+          }, 
+          child: const Text("Voeg verhaal toe")),
       ],
     );
   }
