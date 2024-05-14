@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toy_hub_app/profile_parent.dart';
 
 class ChooseInterestsPage extends StatefulWidget {
   const ChooseInterestsPage({Key? key}) : super(key: key);
@@ -45,17 +46,29 @@ class _ChooseInterestsPageState extends State<ChooseInterestsPage> {
               const SizedBox(height: 20),
               // List of categories
               SizedBox(
-                height: 150, // Adjust the height as needed
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    final categoryName = categories[index];
-                    return _buildCategory(categoryName);
-                  },
+                height: 300, // Adjust the height as needed
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildCategory(categories[0]),
+                        _buildCategory(categories[1]),
+                        _buildCategory(categories[2]),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildCategory(categories[3]),
+                        _buildCategory(categories[4]),
+                        _buildCategory(categories[5]),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 150),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -78,6 +91,10 @@ class _ChooseInterestsPageState extends State<ChooseInterestsPage> {
                     onPressed: selectedInterests.isNotEmpty
                         ? () {
                             // Navigate to the next page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const ParentAuthorizationPage()),
+                            );
                           }
                         : null,
                   ),
@@ -103,10 +120,10 @@ class _ChooseInterestsPageState extends State<ChooseInterestsPage> {
         });
       },
       child: CircleAvatar(
-        radius: 53,
+        radius: 43,
         backgroundColor: isSelected ? Colors.orange : Colors.transparent,
         child: CircleAvatar(
-          radius: 48,
+          radius: 38,
           backgroundImage: AssetImage('images/categories/$categoryName'),
         ),
       ),
