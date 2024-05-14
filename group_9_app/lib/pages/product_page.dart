@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:group_9_app/datastructures/rating_bar.dart';
 import 'package:group_9_app/datastructures/product.dart';
+import 'package:group_9_app/datastructures/story_item.dart';
 import 'package:group_9_app/pages/ARpage.dart';
 import 'dart:convert';
 import 'dart:io';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage({super.key, required this.name, required this.theItem, this.refresh});
+  const ProductPage({super.key, required this.name, required this.theItem});
   final String name;
   final Product theItem;
-  final VoidCallback? refresh;
 
   @override
   State<ProductPage> createState() => _ProductPageState();
@@ -20,12 +20,19 @@ class _ProductPageState extends State<ProductPage> {
   final ScrollController _controller = ScrollController();
   bool liked = false;
   int selected = 0;
+  int rating = 0;
 
   @override
   void initState() {
     super.initState();
     imgHead.value = widget.theItem.mainImage; 
     liked = _isFavoriteFromJson(widget.name);
+    setupRating();
+  }
+
+  void setupRating() async {
+    await _lookupRating();
+    setState(() {});
   }
 
   bool _isFavoriteFromJson(String title) {
@@ -94,7 +101,6 @@ class _ProductPageState extends State<ProductPage> {
     });
 
     await _updateFavoritesInJson();
-    widget.refresh!();
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -120,6 +126,49 @@ class _ProductPageState extends State<ProductPage> {
     return matchingProducts;
   }
 
+  Future<void> _lookupRating() async{
+    int userRating = await _lookupRatingUser();
+
+    if (userRating == -1) { rating = widget.theItem.rate; }
+    else {
+      int totalRating = ((userRating + widget.theItem.rate) / 2).round();
+      rating = totalRating;
+    }
+  }
+
+  Future<int> _lookupRatingUser() async {
+    final file = File('Account1.json');
+    Map<String, dynamic> data = {};
+
+    //Check if file exists
+    if (await file.exists()) {
+      final content = await file.readAsString();
+      try {
+        data = jsonDecode(content) as Map<String, dynamic>;
+      } catch (e) {
+        data = {};
+      }
+    }
+
+    //Get ratings data
+    final String name = widget.theItem.name;
+    final ratings = List<Map<String, dynamic>>.from(data['ratings'] ?? []);
+
+    //look for rating
+    bool found = false;
+    int rate = -1;
+
+    if (ratings.isNotEmpty){
+      found = ratings.any((element) {
+        bool f = (element['name'] == name);
+        if (f) { rate = element['rating']; }
+        return f;
+      });
+    }
+
+    return rate;
+  }
+
   List<Widget> _buildStories() {
     if (widget.theItem.stories.isEmpty) {
       // If there are no stories, return a single widget with a message
@@ -127,14 +176,21 @@ class _ProductPageState extends State<ProductPage> {
     } else {
       // Otherwise, generate widgets based on the stories
       return List<Widget>.generate(widget.theItem.stories.length, (index) {
-        return index % 2 == 0 ? InkWell(
-          onTap: () {},
-          child: SizedBox(
-            height: 100,
-            width: 90,
-            child: Image(image: AssetImage(widget.theItem.stories[index]), fit: BoxFit.fill),
-          )
-        ) : const SizedBox(width: 15);
+        return Row(
+          children: [
+            InkWell(
+              onTap: () {},
+              child: SizedBox(
+                height: 100,
+                width: 90,
+                child: StoryItem(type: widget.theItem.stories[index].type, 
+                                 headerImg: widget.theItem.stories[index].header, 
+                                 file: widget.theItem.stories[index].file),
+              )
+            ),
+            const SizedBox(width: 15,)
+          ],
+        );
       });
     }
   }
@@ -185,7 +241,7 @@ class _ProductPageState extends State<ProductPage> {
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            _buildProductImage(widget.theItem.rate),
+            _buildProductImage(rating),
             const SizedBox(height: 25),
             _buildImageNavigation(widget.theItem.subImages),
             const SizedBox(height: 25),
@@ -196,7 +252,7 @@ class _ProductPageState extends State<ProductPage> {
             const SizedBox(height: 45),
             _buildComparableProductsSection(),
             const SizedBox(height: 45),
-            const RatingBar(),
+            RatingBar(product: widget.theItem.name, refresh: setupRating),
           ],
         ),
       ),
@@ -360,6 +416,12 @@ class _ProductPageState extends State<ProductPage> {
             ),
           ),
         ),
+
+        TextButton(
+          onPressed: () {
+            //TODO
+          }, 
+          child: const Text("Voeg verhaal toe")),
       ],
     );
   }

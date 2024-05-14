@@ -15,7 +15,7 @@
         "description": "",
         "category": ["Star Wars", "LEGO"],
         "rate": 4,
-        "stories": [],
+        "stories": [ {"type" : "IMG", "header" : "images/Product/P1-1.jpg", "file" : "images/Product/P1-1.jpg"}, {"type" : "VID", "header" : "images/Product/P1-1.jpg", "file" : "images/Product/ImgTest.mp4"}],
         "status": "popular"
     },
     {
@@ -105,7 +105,7 @@
         "description": "Vier de 40e verjaardag van Star Wars: Return of the Jedi door een eerbetoon te bouwen aan een legendarische Wookiee met deze LEGO Star Wars Chewbacca (75371) displayfiguur.\n\nGebruik je creatieve kracht om zijn harige lichaam in LEGO stijl na te bootsen en zijn bandolier en gigantische bowcaster te bouwen. Deze indrukwekkende LEGO figuur is ca. 46 cm hoog en heeft een ingebouwde displaystandaard. De set bevat ook een informatieplaatje en een Chewbacca LEGO minifiguur met een noppenschietende bowcaster.\n\nHet begon lang geleden in een sterrenstelsel hier ver, ver vandaan. Nu gaat de saga verder bij jou thuis met de LEGO Star Wars sets voor volwassenen. Ontdek mooie cadeaus voor een verjaardag of de feestdagen voor echte Star Wars fans.\n\nOntworpen om gezien te worden: De bouwbare, niet-verstelbare LEGO figuur van Chewbacca is inclusief een bouwbare bowcaster en een ingebouwde displaystandaard, plus een plaatje met informatie over het personage.\n\nInclusief een Chewbacca LEGO minifiguur: De LEGO minifiguur van Chewbacca heeft een noppenschietende bowcaster en kan naast het informatieplaatje worden neergezet.\n\nBouwen en verzamelen: Dit bouwbare Chewbacca model maakt deel uit van een reeks LEGO Star Wars figuren om te verzamelen, waaronder 75308 R2-D2.\n\nCadeautip: Verwen jezelf of geef deze 2319-delige set cadeau voor een verjaardag of de feestdagen aan een volwassen Star Wars fan of verzamelaar.\n\nBouwbaar Star Wars personage ontworpen om indruk te maken: Deze van LEGO stenen gebouwde Chewbacca figuur is ca. 46 cm hoog.\n\nStapsgewijze instructies: In de doos en in de LEGO Builder app vind je instructies met afbeeldingen.\n\nVan een sterrenstelsel hier ver, ver vandaan tot in jouw huiskamer: LEGO Star Wars verzamelsets voor volwassenen zijn speciaal ontworpen voor jou, de kritische hobbyist die graag met ontspannende, creatieve projecten bezig is.\n",
         "category": ["Star Wars", "LEGO"],
         "rate": 4,
-        "stories": [],
+        "stories": [ {"type" : "IMG", "header" : "images/Product/P1-1.jpg", "file" : "images/Product/P1-1.jpg"} ],
         "status": "popular"
     },
     {

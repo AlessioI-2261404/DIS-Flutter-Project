@@ -8,7 +8,7 @@ class ARPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          Center(
+          const Center(
             child: Text(
               "AR Content Here", // Placeholder for your AR content
               style: TextStyle(fontSize: 24, color: Colors.grey),
