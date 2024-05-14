@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:group_9_app/datastructures/rating_bar.dart';
 import 'package:group_9_app/datastructures/product.dart';
 import 'package:group_9_app/datastructures/story_item.dart';
+import 'package:group_9_app/pages/add_story_page.dart';
 import 'package:group_9_app/pages/ARpage.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -419,7 +420,9 @@ class _ProductPageState extends State<ProductPage> {
 
         TextButton(
           onPressed: () {
-            //TODO
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const AddStoryPage()
+            ));
           }, 
           child: const Text("Voeg verhaal toe")),
       ],
