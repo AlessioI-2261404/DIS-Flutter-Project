@@ -15,7 +15,7 @@
         "description": "",
         "category": ["Star Wars", "LEGO"],
         "rate": 4,
-        "stories": [],
+        "stories": [ {"type" : "IMG", "header" : "images/Product/P1-1.jpg", "file" : "images/Product/P1-1.jpg"}, {"type" : "IMG", "header" : "images/Product/P1-1.jpg", "file" : "images/Product/P1-1.jpg"}],
         "status": "popular"
     },
     {

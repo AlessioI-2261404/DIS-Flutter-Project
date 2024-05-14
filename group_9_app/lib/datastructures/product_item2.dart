@@ -119,34 +119,38 @@ class _ProductItemState extends State<ProductItem> {
           InkWell(
             onTap: widget.onTap,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, 
+              crossAxisAlignment: CrossAxisAlignment.start, // Align text to the start
               children: [
                 SizedBox(
                   width: widget.width,
-                  height: 70,
-                  child: Image.asset(widget.imagePath, fit: BoxFit.fill), 
+                  height: 210,
+                  child: Image.asset(widget.imagePath, fit: BoxFit.fill),
                 ),
                 const SizedBox(height: 3),
                 Flexible(
                   child: Text(
                     widget.titel,
-                    style: const TextStyle(color: Colors.white, fontSize: 16),
-                    overflow: TextOverflow.ellipsis, 
+                    style: const TextStyle(color: Colors.white, fontSize: 23),
+                    overflow: TextOverflow.ellipsis, // Added overflow handling
                   ),
                 ),
-                const SizedBox(height: 3),
+                const SizedBox(height: 5),
                 Text(
-                  widget.rating, 
-                  style: TextStyle(color: Colors.white, fontSize: 14),
+                  widget.rating, // Display the rating directly as text
+                  style: const TextStyle(color: Colors.white, fontSize: 19),
                 ),
               ],
             ),
           ),
-          IconButton(
-            onPressed: _toggleFavorite,
-            icon: Icon(
-              isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: Colors.red,
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: IconButton(
+              iconSize: 40.0, // Increased icon size
+              onPressed: _toggleFavorite,
+              icon: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: const Color.fromARGB(255, 255, 17, 0),
+              ),
             ),
           ),
         ],

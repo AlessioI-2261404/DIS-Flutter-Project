@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:group_9_app/datastructures/comparable_item.dart';
 import 'package:group_9_app/datastructures/rating_bar.dart';
 import 'package:group_9_app/datastructures/product.dart';
+import 'package:group_9_app/datastructures/story_item.dart';
+import 'package:group_9_app/pages/ARpage.dart';
 import 'dart:convert';
 import 'dart:io';
-import 'package:group_9_app/pages/ARpage.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key, required this.name, required this.theItem});
@@ -20,12 +20,19 @@ class _ProductPageState extends State<ProductPage> {
   final ScrollController _controller = ScrollController();
   bool liked = false;
   int selected = 0;
+  int rating = 0;
 
   @override
   void initState() {
     super.initState();
     imgHead.value = widget.theItem.mainImage; 
     liked = _isFavoriteFromJson(widget.name);
+    setupRating();
+  }
+
+  void setupRating() async {
+    await _lookupRating();
+    setState(() {});
   }
 
   bool _isFavoriteFromJson(String title) {
@@ -119,6 +126,49 @@ class _ProductPageState extends State<ProductPage> {
     return matchingProducts;
   }
 
+  Future<void> _lookupRating() async{
+    int userRating = await _lookupRatingUser();
+
+    if (userRating == -1) { rating = widget.theItem.rate; }
+    else {
+      int totalRating = ((userRating + widget.theItem.rate) / 2).round();
+      rating = totalRating;
+    }
+  }
+
+  Future<int> _lookupRatingUser() async {
+    final file = File('Account1.json');
+    Map<String, dynamic> data = {};
+
+    //Check if file exists
+    if (await file.exists()) {
+      final content = await file.readAsString();
+      try {
+        data = jsonDecode(content) as Map<String, dynamic>;
+      } catch (e) {
+        data = {};
+      }
+    }
+
+    //Get ratings data
+    final String name = widget.theItem.name;
+    final ratings = List<Map<String, dynamic>>.from(data['ratings'] ?? []);
+
+    //look for rating
+    bool found = false;
+    int rate = -1;
+
+    if (ratings.isNotEmpty){
+      found = ratings.any((element) {
+        bool f = (element['name'] == name);
+        if (f) { rate = element['rating']; }
+        return f;
+      });
+    }
+
+    return rate;
+  }
+
   List<Widget> _buildStories() {
     if (widget.theItem.stories.isEmpty) {
       // If there are no stories, return a single widget with a message
@@ -126,14 +176,21 @@ class _ProductPageState extends State<ProductPage> {
     } else {
       // Otherwise, generate widgets based on the stories
       return List<Widget>.generate(widget.theItem.stories.length, (index) {
-        return index % 2 == 0 ? InkWell(
-          onTap: () {},
-          child: SizedBox(
-            height: 100,
-            width: 90,
-            child: Image(image: AssetImage(widget.theItem.stories[index]), fit: BoxFit.fill),
-          )
-        ) : const SizedBox(width: 15);
+        return Row(
+          children: [
+            InkWell(
+              onTap: () {},
+              child: SizedBox(
+                height: 100,
+                width: 90,
+                child: StoryItem(type: widget.theItem.stories[index].type, 
+                                 headerImg: widget.theItem.stories[index].header, 
+                                 file: widget.theItem.stories[index].file),
+              )
+            ),
+            const SizedBox(width: 15,)
+          ],
+        );
       });
     }
   }
@@ -170,7 +227,7 @@ class _ProductPageState extends State<ProductPage> {
       children: [
         IconButton(onPressed: _navigateBack, icon: const Icon(Icons.keyboard_return), iconSize: 40),
         const SizedBox(width: 15),
-        Text(widget.name, textAlign: TextAlign.center, style: const TextStyle(fontSize: 25)),
+        Flexible(child: Text(widget.name, textAlign: TextAlign.center, style: const TextStyle(fontSize: 25))),
         const SizedBox(width: 15),
         IconButton(onPressed: () {}, icon: const Icon(Icons.share), iconSize: 40),  // Share functionality to be implemented
       ],
@@ -184,7 +241,7 @@ class _ProductPageState extends State<ProductPage> {
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            _buildProductImage(widget.theItem.rate),
+            _buildProductImage(rating),
             const SizedBox(height: 25),
             _buildImageNavigation(widget.theItem.subImages),
             const SizedBox(height: 25),
@@ -195,7 +252,7 @@ class _ProductPageState extends State<ProductPage> {
             const SizedBox(height: 45),
             _buildComparableProductsSection(),
             const SizedBox(height: 45),
-            const RatingBar(),
+            RatingBar(product: widget.theItem.name, refresh: setupRating),
           ],
         ),
       ),
@@ -259,7 +316,7 @@ class _ProductPageState extends State<ProductPage> {
             ),
           ),
           SizedBox(
-            width: 230,
+            width: 220,
             height: 70,
             child: ListView.separated(
               controller: _controller,
@@ -315,7 +372,7 @@ class _ProductPageState extends State<ProductPage> {
         const SizedBox(width: 40),
         const Icon(Icons.attach_money, size: 23),
         Text(widget.theItem.exactPrice.toString(), style: const TextStyle(fontSize: 20)),
-        const SizedBox(width: 70),
+        const SizedBox(width: 60),
         IconButton(onPressed: _navigateToARPage, icon: const Icon(Icons.view_in_ar, size: 45)),
         IconButton(
           onPressed: _toggleFavorite,
@@ -332,7 +389,7 @@ class _ProductPageState extends State<ProductPage> {
       padding: const EdgeInsets.all(15),
       child: ExpansionTile(
         title: const Text("Description"),
-        subtitle: const Text("Tap to view more about the product."),
+        subtitle: const Text("klik hier om meer te zien over het product."),
         children: [
           widget.theItem.description.isNotEmpty 
             ? Text(widget.theItem.description, style: const TextStyle(fontSize: 14))
@@ -359,6 +416,12 @@ class _ProductPageState extends State<ProductPage> {
             ),
           ),
         ),
+
+        TextButton(
+          onPressed: () {
+            //TODO
+          }, 
+          child: const Text("Voeg verhaal toe")),
       ],
     );
   }
@@ -375,13 +438,13 @@ class _ProductPageState extends State<ProductPage> {
           final products = snapshot.data!;
           if (products.isEmpty) {
             // Show a message if no comparable products are found
-            return const Text('Geen vergelijkbare item gevonden', style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic));
+            return const Text('Geen vergelijkbare speelgoed gevonden', style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic));
           } else {
             // Return the column with dynamically built comparable products
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Comparable Products", style: TextStyle(fontSize: 20)),
+                const Text("Vergelijkbare Speelgoed", style: TextStyle(fontSize: 20)),
                 const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -393,7 +456,7 @@ class _ProductPageState extends State<ProductPage> {
                       separatorBuilder: (_, index) => const SizedBox(width: 10),
                       itemCount: products.length,
                       itemBuilder: (_, index) {
-                        return CompareItem(imagePath: products[index].mainImage, productName: products[index].name); // Assuming CompareItem takes a Product object
+                        return CompareItem(product: products[index],); // Assuming CompareItem takes a Product object
                       },
                     ),
                   ),
@@ -410,18 +473,33 @@ class _ProductPageState extends State<ProductPage> {
 }
 
 class CompareItem extends StatelessWidget {
-  final String imagePath;
-  final String productName;
+  final Product product;
 
-  const CompareItem({Key? key, required this.imagePath, required this.productName}) : super(key: key);
+  const CompareItem({Key? key, required this.product}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Image.asset(imagePath, fit: BoxFit.fill, width: 90, height: 100),
-        Text(productName, style: TextStyle(fontSize: 14)),
-      ],
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ProductPage(name: product.name, theItem: product)
+        ));
+      },
+      child: Column(
+        children: [
+          Image.asset(product.mainImage, fit: BoxFit.fill, width: 90, height: 100),
+          SizedBox(
+            width: 100,
+            child: Flexible(
+              child: Text(
+                product.name, 
+                style: const TextStyle(fontSize: 14),
+                overflow: TextOverflow.ellipsis,
+                )
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

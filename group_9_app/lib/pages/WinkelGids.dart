@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:group_9_app/pages/ARpage.dart';  // Ensure this import is correct
+import 'package:group_9_app/pages/WinkelgidsMock.dart';  
 
 class WinkelGids extends StatefulWidget {
   const WinkelGids({Key? key}) : super(key: key);
@@ -79,7 +79,7 @@ class _WinkelGidsState extends State<WinkelGids> {
       ),
       floatingActionButton: _selectedItemIndex != null ? FloatingActionButton.extended(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ARPage()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WinkelgidsMock()));
         },
         label: Text("Vind Item"),
         icon: Icon(Icons.arrow_forward),

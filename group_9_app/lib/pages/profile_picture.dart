@@ -5,7 +5,8 @@ class ChooseProfilePicturePage extends StatefulWidget {
   const ChooseProfilePicturePage({Key? key}) : super(key: key);
 
   @override
-  _ChooseProfilePicturePageState createState() => _ChooseProfilePicturePageState();
+  _ChooseProfilePicturePageState createState() =>
+      _ChooseProfilePicturePageState();
 }
 
 class _ChooseProfilePicturePageState extends State<ChooseProfilePicturePage> {
@@ -45,17 +46,33 @@ class _ChooseProfilePicturePageState extends State<ChooseProfilePicturePage> {
               const SizedBox(height: 20),
               // List of profile pictures
               SizedBox(
-                height: 150, // Adjust the height as needed
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: profilePictures.length,
-                  itemBuilder: (context, index) {
-                    final pictureName = profilePictures[index];
-                    return _buildProfilePicture(pictureName);
-                  },
+                height: 300, // Adjust the height as needed
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildProfilePicture(profilePictures[0]),
+                        SizedBox(width: 10),
+                        _buildProfilePicture(profilePictures[1]),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildProfilePicture(profilePictures[2]),
+                        SizedBox(width: 10),
+                        _buildProfilePicture(profilePictures[3]),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    _buildProfilePicture(profilePictures[4]),
+                  ],
                 ),
               ),
-              const SizedBox(height: 150),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -73,14 +90,17 @@ class _ChooseProfilePicturePageState extends State<ChooseProfilePicturePage> {
                     icon: Icon(
                       Icons.arrow_forward,
                       size: 30,
-                      color: selectedPicture != null ? Colors.white : Colors.white.withOpacity(0.5), // Faded color for the arrow
+                      color: selectedPicture != null
+                          ? Colors.white
+                          : Colors.white.withOpacity(0.5), // Faded color for the arrow
                     ),
                     onPressed: selectedPicture != null
                         ? () {
                             // Navigate to the next page
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const ChooseInterestsPage()),
+                              MaterialPageRoute(
+                                  builder: (context) => const ChooseInterestsPage()),
                             );
                           }
                         : null,
@@ -102,11 +122,13 @@ class _ChooseProfilePicturePageState extends State<ChooseProfilePicturePage> {
         });
       },
       child: CircleAvatar(
-        radius: 53,
-        backgroundColor: selectedPicture == pictureName ? Colors.orange : Colors.transparent,
+        radius: 40,
+        backgroundColor:
+            selectedPicture == pictureName ? Colors.orange : Colors.transparent,
         child: CircleAvatar(
-          radius: 48,
-          backgroundImage: AssetImage('images/profile_pictures/$pictureName'),
+          radius: 35,
+          backgroundImage:
+              AssetImage('images/profile_pictures/$pictureName'),
         ),
       ),
     );
