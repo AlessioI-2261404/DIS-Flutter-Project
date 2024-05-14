@@ -33,10 +33,6 @@ class _MyHomePageState extends State<MyHomePage> {
     loadProducts();
   }
 
-  void _refresh() {
-   this.setState(() {});
-  }
-
   Future<void> loadProfilePicture() async {
     final file = File('Account1.json');
     if (await file.exists()) {
@@ -103,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       titel: theItem.name,
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ProductPage(name: theItem.name, theItem: theItem, refresh: _refresh,)
+                          builder: (context) => ProductPage(name: theItem.name, theItem: theItem)
                         ));
                       },
                       width: 160,

@@ -1,3 +1,5 @@
+import 'package:group_9_app/datastructures/story.dart';
+
 class Product {
   final String name;
   final String mainImage;
@@ -7,7 +9,7 @@ class Product {
   final String description;
   final List<String> category;
   final int rate;
-  final List<dynamic> stories;
+  final List<Story> stories;
   final String status;
 
   Product({
@@ -33,7 +35,9 @@ class Product {
       description: json['description'],
       category: List<String>.from(json['category']),
       rate: json['rate'],
-      stories: (json['stories'] as List<dynamic>? ?? []),
+      stories: (json['stories'] as List<dynamic>? ?? [])
+          .map((storyJson) => Story.fromJson(storyJson))
+          .toList(),
       status: json['status'],
     );
   }

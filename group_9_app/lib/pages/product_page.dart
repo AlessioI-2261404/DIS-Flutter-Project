@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:group_9_app/datastructures/rating_bar.dart';
 import 'package:group_9_app/datastructures/product.dart';
+import 'package:group_9_app/datastructures/story_item.dart';
 import 'package:group_9_app/pages/ARpage.dart';
 import 'dart:convert';
 import 'dart:io';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage({super.key, required this.name, required this.theItem, this.refresh});
+  const ProductPage({super.key, required this.name, required this.theItem});
   final String name;
   final Product theItem;
-  final VoidCallback? refresh;
 
   @override
   State<ProductPage> createState() => _ProductPageState();
@@ -94,7 +94,6 @@ class _ProductPageState extends State<ProductPage> {
     });
 
     await _updateFavoritesInJson();
-    widget.refresh!();
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -127,14 +126,21 @@ class _ProductPageState extends State<ProductPage> {
     } else {
       // Otherwise, generate widgets based on the stories
       return List<Widget>.generate(widget.theItem.stories.length, (index) {
-        return index % 2 == 0 ? InkWell(
-          onTap: () {},
-          child: SizedBox(
-            height: 100,
-            width: 90,
-            child: Image(image: AssetImage(widget.theItem.stories[index]), fit: BoxFit.fill),
-          )
-        ) : const SizedBox(width: 15);
+        return Row(
+          children: [
+            InkWell(
+              onTap: () {},
+              child: SizedBox(
+                height: 100,
+                width: 90,
+                child: StoryItem(type: widget.theItem.stories[index].type, 
+                                 headerImg: widget.theItem.stories[index].header, 
+                                 file: widget.theItem.stories[index].file),
+              )
+            ),
+            const SizedBox(width: 15,)
+          ],
+        );
       });
     }
   }
