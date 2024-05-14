@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:group_9_app/pages/profile_name.dart';
+import 'package:group_9_app/main.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ChooseProfile());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class ChooseProfile extends StatelessWidget {
+  const ChooseProfile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +52,11 @@ class LoginPage extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      // Navigate to the previous page
-                      Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyApp()), 
+                          (Route<dynamic> route) => false,
+                        );
                     },
                     child: const Column(
                       children: [

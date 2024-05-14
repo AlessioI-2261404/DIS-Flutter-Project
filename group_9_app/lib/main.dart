@@ -108,7 +108,7 @@ class BottomNavBarState extends State<BottomNavBar> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('No'),
+              child: const Text('Nee'),
             ),
             TextButton(
               onPressed: () {
@@ -120,7 +120,7 @@ class BottomNavBarState extends State<BottomNavBar> {
                   _selectedIndex = 3;
                 });
               },
-              child: const Text('Yes'),
+              child: const Text('Ja'),
             ),
           ],
         ),

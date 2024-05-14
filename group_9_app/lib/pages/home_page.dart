@@ -160,7 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => MyApp(),
+          builder: (context) => ChooseProfile(),
         ));
       },
       child: Container(

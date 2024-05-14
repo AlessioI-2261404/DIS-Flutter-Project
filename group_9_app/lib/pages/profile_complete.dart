@@ -59,7 +59,7 @@ class CompletePage extends StatelessWidget {
                       onPressed: () {
                           Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => MyApp()), // Replace MainPage with your actual main page widget
+                          MaterialPageRoute(builder: (context) => MyApp()), 
                           (Route<dynamic> route) => false,
                         );
                       },

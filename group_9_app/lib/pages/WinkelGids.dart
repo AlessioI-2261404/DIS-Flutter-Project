@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:group_9_app/pages/WinkelgidsMock.dart';  
+import 'package:group_9_app/pages/WinkelgidsMock.dart';
 
 class WinkelGids extends StatefulWidget {
   const WinkelGids({Key? key}) : super(key: key);
@@ -68,23 +68,25 @@ class _WinkelGidsState extends State<WinkelGids> {
         child: locationAccess == null
             ? const CircularProgressIndicator()
             : locationAccess! && (favorites == null || favorites!.isEmpty)
-              ? Center(
-                  child: Text(
-                    message,
-                    style: const TextStyle(fontSize: 18),
-                    textAlign: TextAlign.center,
-                  ),
-                )
-              : buildFavoritesGrid(),
+                ? Center(
+                    child: Text(
+                      message,
+                      style: const TextStyle(fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                : buildFavoritesGrid(),
       ),
-      floatingActionButton: _selectedItemIndex != null ? FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WinkelgidsMock()));
-        },
-        label: Text("Vind Item"),
-        icon: Icon(Icons.arrow_forward),
-        backgroundColor: Colors.blue,
-      ) : null,
+      floatingActionButton: _selectedItemIndex != null
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WinkelgidsMock()));
+              },
+              label: Text("Vind Item"),
+              icon: Icon(Icons.arrow_forward),
+              backgroundColor: Colors.blue,
+            )
+          : null,
     );
   }
 
@@ -114,15 +116,21 @@ class _WinkelGidsState extends State<WinkelGids> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Expanded(
+                SizedBox(
+                  height: 100,
+                  width: double.infinity,
                   child: Image.asset(
                     item['imagePath'],
                     fit: BoxFit.cover,
                   ),
                 ),
                 ListTile(
-                  title: Text(item['title']),
-                  tileColor: isSelected ? Colors.blue[50] : null,
+                  title: Text(
+                    item['title'],
+                    overflow: TextOverflow.fade,
+                    maxLines: 2,
+                  ),
+                  tileColor: isSelected ? Colors.blue[100] : Colors.white,
                 ),
               ],
             ),
