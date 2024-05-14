@@ -6,9 +6,10 @@ import 'dart:convert';
 import 'dart:io';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage({super.key, required this.name, required this.theItem});
+  const ProductPage({super.key, required this.name, required this.theItem, this.refresh});
   final String name;
   final Product theItem;
+  final VoidCallback? refresh;
 
   @override
   State<ProductPage> createState() => _ProductPageState();
@@ -93,6 +94,7 @@ class _ProductPageState extends State<ProductPage> {
     });
 
     await _updateFavoritesInJson();
+    widget.refresh!();
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
