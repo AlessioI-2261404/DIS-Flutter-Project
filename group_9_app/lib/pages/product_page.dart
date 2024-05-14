@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:group_9_app/datastructures/rating_bar.dart';
 import 'package:group_9_app/datastructures/product.dart';
+import 'package:group_9_app/datastructures/story.dart';
 import 'package:group_9_app/datastructures/story_item.dart';
 import 'package:group_9_app/pages/add_story_page.dart';
 import 'package:group_9_app/pages/ARpage.dart';
@@ -22,6 +24,7 @@ class _ProductPageState extends State<ProductPage> {
   bool liked = false;
   int selected = 0;
   int rating = 0;
+  late List<Story> stories = [];
 
   @override
   void initState() {
@@ -29,15 +32,37 @@ class _ProductPageState extends State<ProductPage> {
     imgHead.value = widget.theItem.mainImage; 
     liked = _isFavoriteFromJson(widget.name);
     setupRating();
+    updateStories();
   }
 
   void setupRating() async {
     await _lookupRating();
     setState(() {});
   }
-
-  void refreshStories() {
+  
+  void updateStories() async {
+    await _getStories();
     setState(() {});
+  }
+
+  Future<void> _getStories() async {
+    final File file = File('Product.json');
+    if (!file.existsSync()) {
+      if (kDebugMode) { print("File not found"); }
+      return;
+    }
+    final String contents = await file.readAsString();
+    final List<dynamic> jsonData = jsonDecode(contents);
+
+    // Find the product and update its stories
+    for (var product in jsonData) {
+      if (product['name'] == widget.name) {
+        stories = (product['stories'] as List<dynamic>? ?? [])
+          .map((storyJson) => Story.fromJson(storyJson))
+          .toList();
+        break;
+      }
+    }
   }
 
   bool _isFavoriteFromJson(String title) {
@@ -180,7 +205,7 @@ class _ProductPageState extends State<ProductPage> {
       return [const Text("No stories yet.", style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic))];
     } else {
       // Otherwise, generate widgets based on the stories
-      return List<Widget>.generate(widget.theItem.stories.length, (index) {
+      return List<Widget>.generate(stories.length, (index) {
         return Row(
           children: [
             InkWell(
@@ -188,9 +213,9 @@ class _ProductPageState extends State<ProductPage> {
               child: SizedBox(
                 height: 100,
                 width: 90,
-                child: StoryItem(type: widget.theItem.stories[index].type, 
-                                 headerImg: widget.theItem.stories[index].header, 
-                                 file: widget.theItem.stories[index].file),
+                child: StoryItem(type: stories[index].type, 
+                                 headerImg: stories[index].header, 
+                                 file: stories[index].file),
               )
             ),
             const SizedBox(width: 15,)
@@ -426,7 +451,7 @@ class _ProductPageState extends State<ProductPage> {
           child: TextButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => AddStoryPage(product: widget.name, refresh: refreshStories,)
+                builder: (context) => AddStoryPage(product: widget.name, refresh: updateStories,)
               ));
             }, 
             child: const Text("Voeg verhaal toe")),

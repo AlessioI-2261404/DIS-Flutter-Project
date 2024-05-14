@@ -30,16 +30,11 @@ class _AddStoryPageState extends State<AddStoryPage> {
     });
   }
 
-  // String getFileExtension(String file){
-  //   List<String> exts = file.split('.');
-  //   return exts.last;
-  // }
-
-  void _return() {
-    Navigator.pop(context as BuildContext);
+  void _return(BuildContext context) {
+    Navigator.pop(context);
   }
 
-  void _uploadStory() async {
+  void _uploadStory(BuildContext context) async {
     if (_selected == null) { return; }
 
     final file = File('Product.json');
@@ -55,8 +50,6 @@ class _AddStoryPageState extends State<AddStoryPage> {
       }
     }
 
-    print(file.path);
-
     final String fileName = uuid.v1() + '.png';  //generate name based on time
     final String savedPath = join("images/stories/", fileName);
 
@@ -64,7 +57,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
     await File(_selected!.path).copy(savedPath);
     _modifyJsonFile(savedPath);
     widget.refresh(); //Call refresh
-    _return();
+    _return(context);
   }
 
   Future<void> _modifyJsonFile(String path) async {
@@ -118,7 +111,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
                   IconButton(onPressed: () => _pickFileFormGallary(),
                   icon: const Icon(Icons.redo)),
                   const SizedBox(width: 140,),
-                  IconButton(onPressed: () => _uploadStory(), icon: const Icon(Icons.navigate_next))
+                  IconButton(onPressed: () => _uploadStory(context), icon: const Icon(Icons.navigate_next))
               ],)
               : TextButton(
                 onPressed: () => _pickFileFormGallary(), 
