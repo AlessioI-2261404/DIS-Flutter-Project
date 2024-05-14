@@ -1,1 +1,1 @@
-{"favoriteCategories":[],"favorites":[],"accountDetails":{"email":"test@test.com","username":"test_user","password":123456,"cameraAccess":true,"locationAccess":true},"pfppicpath":"picture.jpg"}
+{"favoriteCategories":["BARBIE"],"favorites":[],"accountDetails":{"email":"test@test.com","username":"test_user","password":123456,"cameraAccess":true,"locationAccess":false},"pfppicpath":"picture.jpg"}

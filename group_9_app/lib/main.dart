@@ -6,8 +6,6 @@ import 'pages/FavoritesPage.dart';
 import 'pages/SearchPage.dart';
 import 'pages/WinkelGids.dart';
 import 'pages/QRpage.dart';
-import 'pages/product_page.dart';
-import 'pages/ProfilePage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,14 +14,14 @@ void main() {
 
 void createEmptyJsonFile() async {
   final Map<String, dynamic> jsonData = {
-    'favoriteCategories': [],
+    'favoriteCategories': ["BARBIE"],
     'favorites': [],
     'accountDetails': {
       'email': 'test@test.com',
       'username': 'test_user',
       'password': 123456,
       'cameraAccess': true,
-      'locationAccess': true,
+      'locationAccess': false,
     },
     'pfppicpath': 'picture.jpg',
   };
@@ -42,7 +40,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 38, 255)),
         useMaterial3: true,
       ),
-      home: const Center(
+      home: 
+      const Center(
         child: SizedBox(
           width: 295,
           height: 640,
@@ -55,33 +54,33 @@ class MyApp extends StatelessWidget {
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
-
   @override
-  _BottomNavBarState createState() => _BottomNavBarState();
+  BottomNavBarState createState() => BottomNavBarState();
 }
 
-class _BottomNavBarState extends State<BottomNavBar> {
+class BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    const MyHomePage(
-      title: 'Home Page',
-      imagePathsBanner: ['images/home/Banner/Aanbieding1.png', 'images/home/Banner/SuperDeals.jpg'],
-      imagePathsPopular: ['images/home/Popular/YodaFigure.jpg', 'images/home/Popular/BarbiePulsBeryDollSet.jpg'],
-      popularProductNames: ["Yoda Figuur 1", "Barbie 2.0"],
-      imagePathsRecommended: ['images/home/Recommended/LegoDeathStar.jpg', 'images/home/Recommended/LegoDeathStar.jpg'],
-      recommendedProductNames: ['Lego Death Star', 'Lego Death Star'],
-    ),
-    const SearchPage(),
-    const FavoritePage(),
-    const WinkelGids(),
-  ];
+  Widget _getPage(int index) {
+    switch (index) {
+      case 0:
+        return const MyHomePage(imagePathsBanner: ['images/home/Banner/Aanbieding1.png', 'images/home/Banner/SuperDeals.jpg']);
+      case 1:
+        return const SearchPage();
+      case 2:
+        return const FavoritePage();
+      case 3:
+        return const WinkelGids();
+      default:
+        return const Center(child: Text("Page not found"));
+    }
+  }
 
   void _onItemTapped(int index) {
-    if (index == 4) { // QR Scan tab
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const QRPage(),
-      ));
+    if (index == 3) {
+      _checkLocationAccess(context);
+    } else if (index == 4) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const QRPage()));
     } else {
       setState(() {
         _selectedIndex = index;
@@ -89,13 +88,50 @@ class _BottomNavBarState extends State<BottomNavBar> {
     }
   }
 
+  Future<void> _checkLocationAccess(BuildContext localContext) async {
+    final file = File('Account1.json');
+    final contents = await file.readAsString();
+    final jsonData = jsonDecode(contents);
+    bool locationAccess = jsonData['accountDetails']['locationAccess'] as bool;
+
+    if (locationAccess) {
+      setState(() {
+        _selectedIndex = 3; // Navigate to WinkelGids if location access is enabled
+      });
+    } else {
+      if (!mounted) return;
+      showDialog(
+        context: localContext,
+        builder: (BuildContext dialogContext) => AlertDialog(
+          title: const Text('Location Required'),
+          content: const Text('You can\'t use this function without enabling your location. Do you want to enable it?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () {
+                jsonData['accountDetails']['locationAccess'] = true;
+                file.writeAsString(jsonEncode(jsonData));
+                Navigator.of(dialogContext).pop();
+                if (!mounted) return;
+                setState(() {
+                  _selectedIndex = 3;
+                });
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _pages,
-      ),
+      body: _getPage(_selectedIndex),
       bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }

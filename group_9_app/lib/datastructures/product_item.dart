@@ -8,14 +8,14 @@ class ProductItem extends StatefulWidget {
     required this.imagePath,
     required this.titel,
     required this.onTap,
-    this.rating = 1,
+    this.rating = "No rating",  
     this.width = 150,
   }) : super(key: key);
 
   final String titel;
   final String imagePath;
   final VoidCallback onTap;
-  final int rating;
+  final String rating;  
   final double? width;
 
   @override
@@ -109,27 +109,25 @@ class _ProductItemState extends State<ProductItem> {
           InkWell(
             onTap: widget.onTap,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start, // Align text to the start
               children: [
                 SizedBox(
                   width: widget.width,
-                  height: 100,
-                  child: Image.asset(widget.imagePath, fit: BoxFit.fill),
+                  height: 80,
+                  child: Image.asset(widget.imagePath, fit: BoxFit.cover), // Changed fit to cover
                 ),
                 const SizedBox(height: 3),
-                Row(
-                  children: [
-                    Text(
-                      widget.titel,
-                      style: const TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                  ],
+                Flexible(
+                  child: Text(
+                    widget.titel,
+                    style: const TextStyle(color: Colors.white, fontSize: 18),
+                    overflow: TextOverflow.ellipsis, // Added overflow handling
+                  ),
                 ),
                 const SizedBox(height: 5),
-                Row(
-                  children: List.generate(
-                    widget.rating,
-                    (index) => const Icon(Icons.attach_money),
-                  ),
+                Text(
+                  widget.rating,  // Display the rating directly as text
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ],
             ),

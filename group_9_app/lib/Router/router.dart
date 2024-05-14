@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:group_9_app/datastructures/bottem_nav_bar.dart';
 //navbar: headpages
 import 'package:group_9_app/pages/home_page.dart';
 import 'package:group_9_app/pages/SearchPage.dart';
