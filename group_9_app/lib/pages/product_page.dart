@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:group_9_app/datastructures/comparable_item.dart';
 import 'package:group_9_app/datastructures/rating_bar.dart';
 import 'package:group_9_app/datastructures/product.dart';
+import 'package:group_9_app/pages/ARpage.dart';
 import 'dart:convert';
 import 'dart:io';
-import 'package:group_9_app/pages/ARpage.dart';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage({super.key, required this.name, required this.theItem});
+  const ProductPage({super.key, required this.name, required this.theItem, this.refresh});
   final String name;
   final Product theItem;
+  final VoidCallback? refresh;
 
   @override
   State<ProductPage> createState() => _ProductPageState();
@@ -94,6 +94,7 @@ class _ProductPageState extends State<ProductPage> {
     });
 
     await _updateFavoritesInJson();
+    widget.refresh!();
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -170,7 +171,7 @@ class _ProductPageState extends State<ProductPage> {
       children: [
         IconButton(onPressed: _navigateBack, icon: const Icon(Icons.keyboard_return), iconSize: 40),
         const SizedBox(width: 15),
-        Text(widget.name, textAlign: TextAlign.center, style: const TextStyle(fontSize: 25)),
+        Flexible(child: Text(widget.name, textAlign: TextAlign.center, style: const TextStyle(fontSize: 25))),
         const SizedBox(width: 15),
         IconButton(onPressed: () {}, icon: const Icon(Icons.share), iconSize: 40),  // Share functionality to be implemented
       ],
@@ -259,7 +260,7 @@ class _ProductPageState extends State<ProductPage> {
             ),
           ),
           SizedBox(
-            width: 230,
+            width: 220,
             height: 70,
             child: ListView.separated(
               controller: _controller,
@@ -315,7 +316,7 @@ class _ProductPageState extends State<ProductPage> {
         const SizedBox(width: 40),
         const Icon(Icons.attach_money, size: 23),
         Text(widget.theItem.exactPrice.toString(), style: const TextStyle(fontSize: 20)),
-        const SizedBox(width: 70),
+        const SizedBox(width: 60),
         IconButton(onPressed: _navigateToARPage, icon: const Icon(Icons.view_in_ar, size: 45)),
         IconButton(
           onPressed: _toggleFavorite,
@@ -332,7 +333,7 @@ class _ProductPageState extends State<ProductPage> {
       padding: const EdgeInsets.all(15),
       child: ExpansionTile(
         title: const Text("Description"),
-        subtitle: const Text("Tap to view more about the product."),
+        subtitle: const Text("klik hier om meer te zien over het product."),
         children: [
           widget.theItem.description.isNotEmpty 
             ? Text(widget.theItem.description, style: const TextStyle(fontSize: 14))
@@ -375,13 +376,13 @@ class _ProductPageState extends State<ProductPage> {
           final products = snapshot.data!;
           if (products.isEmpty) {
             // Show a message if no comparable products are found
-            return const Text('Geen vergelijkbare item gevonden', style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic));
+            return const Text('Geen vergelijkbare speelgoed gevonden', style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic));
           } else {
             // Return the column with dynamically built comparable products
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Comparable Products", style: TextStyle(fontSize: 20)),
+                const Text("Vergelijkbare Speelgoed", style: TextStyle(fontSize: 20)),
                 const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -393,7 +394,7 @@ class _ProductPageState extends State<ProductPage> {
                       separatorBuilder: (_, index) => const SizedBox(width: 10),
                       itemCount: products.length,
                       itemBuilder: (_, index) {
-                        return CompareItem(imagePath: products[index].mainImage, productName: products[index].name); // Assuming CompareItem takes a Product object
+                        return CompareItem(product: products[index],); // Assuming CompareItem takes a Product object
                       },
                     ),
                   ),
@@ -410,18 +411,33 @@ class _ProductPageState extends State<ProductPage> {
 }
 
 class CompareItem extends StatelessWidget {
-  final String imagePath;
-  final String productName;
+  final Product product;
 
-  const CompareItem({Key? key, required this.imagePath, required this.productName}) : super(key: key);
+  const CompareItem({Key? key, required this.product}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Image.asset(imagePath, fit: BoxFit.fill, width: 90, height: 100),
-        Text(productName, style: TextStyle(fontSize: 14)),
-      ],
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ProductPage(name: product.name, theItem: product)
+        ));
+      },
+      child: Column(
+        children: [
+          Image.asset(product.mainImage, fit: BoxFit.fill, width: 90, height: 100),
+          SizedBox(
+            width: 100,
+            child: Flexible(
+              child: Text(
+                product.name, 
+                style: const TextStyle(fontSize: 14),
+                overflow: TextOverflow.ellipsis,
+                )
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
