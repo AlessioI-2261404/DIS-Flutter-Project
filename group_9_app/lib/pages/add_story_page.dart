@@ -31,24 +31,12 @@ class _AddStoryPageState extends State<AddStoryPage> {
   }
 
   void _return(BuildContext context) {
+    print("RETURN STORY PAGE TESTING");
     Navigator.pop(context);
   }
 
   void _uploadStory(BuildContext context) async {
     if (_selected == null) { return; }
-
-    final file = File('Product.json');
-    Map<String, dynamic> data = {};
-
-    //Check if file exists
-    if (await file.exists()) {
-      final content = await file.readAsString();
-      try {
-        data = jsonDecode(content) as Map<String, dynamic>;
-      } catch (e) {
-        data = {};
-      }
-    }
 
     final String fileName = uuid.v1() + '.png';  //generate name based on time
     final String savedPath = join("images/stories/", fileName);
@@ -84,6 +72,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
 
     // Write the updated JSON back to the file
     await file.writeAsString(jsonEncode(jsonData));
+    print("MODIFIED JSON :: ADDED STORY");
   }
 
   @override
